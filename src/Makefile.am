@@ -1,0 +1,1 @@
+SUBDIRS = collision shyemu-crashreport shyemu-shared shyemu-logonserver shyemu-world scripts 
