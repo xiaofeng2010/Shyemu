@@ -375,6 +375,14 @@ enum ModType
 	MOD_SPELL	= 2
 };
 
+enum DrunkenState
+{
+	DRUNKEN_SOBER	= 0,
+	DRUNKEN_TIPSY	= 1,
+	DRUNKEN_DRUNK	= 2,
+	DRUNKEN_SMASHED	= 3
+};
+
 struct spells
 {
 	uint16  spellId;
@@ -1140,6 +1148,7 @@ public:
 	void removeSpellByHashName(uint32 hash);
 	bool removeSpell(uint32 SpellID, bool MoveToDeleted, bool SupercededSpell, uint32 SupercededSpellID);
 	bool removeDeletedSpell( uint32 SpellID );
+	void SendPreventSchoolCast(uint32 SpellSchool, uint32 unTimeMs);
 
     // PLEASE DO NOT INLINE!
     void AddOnStrikeSpell(SpellEntry* sp, uint32 delay)
@@ -1179,7 +1188,7 @@ public:
     /* Actionbar                                                            */
     /************************************************************************/
 	void                setAction(uint8 button, uint16 action, uint8 type, uint8 misc);
-	void                SendInitialActions();
+	void                SendInitialActions(uint8 spec);
     bool                m_actionsDirty;
 
     /************************************************************************/
@@ -1247,13 +1256,10 @@ public:
 	{
 		std::map<uint32, uint8> talents;	// map of <talentId, talentRank>
 		uint16  glyphs[GLYPHS_COUNT];
+		ActionButton actionbars[PLAYER_ACTION_BUTTON_SIZE];
 	};
 	PlayerSpec m_specs[MAX_SPEC_COUNT];
-	/*struct PlayerSpec
-	{
-		std::map<uint32, uint8> talents;	// map of <talentId, talentRank>
-		uint16  glyphs[GLYPHS_COUNT];
-	};*/
+
     /************************************************************************/
     /* Groups                                                               */
     /************************************************************************/
@@ -1316,6 +1322,17 @@ public:
 	SHYEMU_INLINE uint8        GetDuelState() { return m_duelState; }
     // duel variables
     Player*             DuelingWith;
+
+	/************************************************************************/
+	/* Drunk system                                                         */
+	/************************************************************************/
+	void SetDrunkValue( uint16 newDrunkValue, uint32 itemid = 0 );
+	uint16 GetDrunkValue() const { return m_drunk; }
+	static DrunkenState GetDrunkenstateByValue( uint16 value );
+	void HandleSobering();
+
+	uint32 m_drunkTimer;
+	uint16 m_drunk;
 
     /************************************************************************/
     /* Trade                                                                */
@@ -1602,7 +1619,6 @@ public:
 	float m_TransporterUnk;
 	// Misc
 	void EventCannibalize(uint32 amount);
-	void EventReduceDrunk(bool full);
 	bool m_AllowAreaTriggerPort;
 	void EventAllowTiggerPort(bool enable);
 	void UpdatePowerAmm();
@@ -2172,6 +2188,10 @@ protected:
 	void _LoadGlyphs(QueryResult * result);
 	void _SaveGlyphsToDB(QueryBuffer * buf);
 
+	void _LoadActionBars(QueryResult * result);
+	void _SaveActionBarsToDB(QueryBuffer * buf);
+	void _SaveActionBarsToDBFirst(QueryBuffer * buf);
+
 	void _LoadPet(QueryResult * result);
 	void _LoadPetNo();
 	void _LoadPetSpells(QueryResult * result);
@@ -2413,24 +2433,6 @@ public:
     /************************************************************************/
 	/* Player Achievements - end				                            */
     /************************************************************************/
-
-    /************************************************************************/
-    /* Talent Specs                                                         */
-    /************************************************************************/
-	// VLack: Talent Specs from Aspire, now just the values for an empty packet
-	//uint16 m_maxTalentPoints;
-//	uint16 GetMaxTalentPoints();
-//	void ApplySpec(uint8 spec, bool init);
-//	void ApplyTalent(uint32 spellId);
-//	void RemoveTalent(uint32 spellid);
-	//*uint8 m_talentSpecsCount;
-	//uint8 m_talentActiveSpec;
-	/*struct PlayerSpec
-	{
-		std::map<uint32, uint8> talents;	// map of <talentId, talentRank>
-		uint16  glyphs[GLYPHS_COUNT];
-	*/
-	//PlayerSpec m_specs[MAX_SPEC_COUNT];
 
 	bool titanGrip;
 	void ResetTitansGrip();

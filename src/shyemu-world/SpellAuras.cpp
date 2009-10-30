@@ -1335,21 +1335,15 @@ void Aura::SpellAuraBindSight(bool apply)
 {
 	SetPositive();
 	// MindVision
-	if(apply)
-	{
-		Unit *caster = GetUnitCaster();
-		if(!caster || !caster->IsPlayer())
-			return;
-		caster->SetUInt64Value(PLAYER_FARSIGHT, 0);
-		caster->SetUInt64Value(PLAYER_FARSIGHT, m_target->GetGUID());
-	}
-	else
-	{
-		Unit *caster = GetUnitCaster();
-		if(!caster || !caster->IsPlayer())
-			return;
-		caster->SetUInt64Value(PLAYER_FARSIGHT, 0 );
-	}
+    Unit *caster = GetUnitCaster();  
+    if( caster == NULL || !caster->IsPlayer() )  
+    return;  
+
+     if( apply )  
+     caster->SetUInt64Value( PLAYER_FARSIGHT, m_target->GetGUID() );  
+       else  
+           caster->SetUInt64Value( PLAYER_FARSIGHT, 0 );  
+
 }
 
 void Aura::SpellAuraModPossess(bool apply)
@@ -1552,7 +1546,7 @@ void Aura::EventPeriodicTriggerDummy()
 
 				   GameObject * circle = m_target->GetMapMgr()->GetGameObject(m_target->m_ObjectSlots[1]);
                    SpellEntry* sp = dbcSpell.LookupEntryForced(48020); 
-                   if(circle && sp && m_target->CalcDistance(circle) <= 50.0f )        
+                   if(circle && sp && m_target->CalcDistance(circle) <= 40.0f )        
                        {
                                //if(m_target->m_auraStackCount[35] == 0)
                                //{
@@ -10299,11 +10293,13 @@ void Aura::SpellAuraModAttackPowerOfArmor( bool apply )
 			SetPositive();
 		else
 			SetNegative();
+                 
+            mod->fixed_amount[mod->i] = m_target->GetUInt32Value( UNIT_FIELD_RESISTANCES ) / mod->m_amount;  
+            m_target->ModUnsigned32Value( UNIT_FIELD_ATTACK_POWER_MODS, mod->fixed_amount[mod->i] );  
+    }  
+        else  
+            m_target->ModUnsigned32Value( UNIT_FIELD_ATTACK_POWER_MODS, -mod->fixed_amount[mod->i] );  
 
-		m_target->ModUnsigned32Value( UNIT_FIELD_ATTACK_POWER_MODS,  ( m_target->GetUInt32Value(UNIT_FIELD_RESISTANCES) /mod->m_amount ) );
-	}
-	else
-		m_target->ModUnsigned32Value( UNIT_FIELD_ATTACK_POWER_MODS, - static_cast<int32>( m_target->GetUInt32Value(UNIT_FIELD_RESISTANCES) /mod->m_amount ) );
 
 	m_target->CalcDamage();
 }

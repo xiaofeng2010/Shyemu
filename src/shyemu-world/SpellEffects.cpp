@@ -2162,7 +2162,11 @@ out:
 			GameObject * DemonicCircle = p_caster->GetMapMgr()->GetGameObject( p_caster->m_ObjectSlots[1] );
 			if( DemonicCircle )
 			{
-				p_caster->SafeTeleport( DemonicCircle->GetMapId(), DemonicCircle->GetInstanceID(), DemonicCircle->GetPosition());
+				if( DemonicCircle->GetDistance2dSq(p_caster) > 40.0f )
+					p_caster->SendCastResult(48020, SPELL_FAILED_OUT_OF_RANGE, 0, 0);
+				else
+					p_caster->SafeTeleport( DemonicCircle->GetMapId(), DemonicCircle->GetInstanceID(), DemonicCircle->GetPosition()); //ok, wat u fixed? u understand? yah thanks :D
+
 			}
 		}break;
 	case 25228:
@@ -4219,8 +4223,9 @@ void Spell::SpellEffectSummon(uint32 i)
 	case 407:	SpellEffectSummonCritter(i);	return;
 	case 61:
 	case 669:
-	case 881:	SpellEffectSummonGuardian(i);	return;
-	case 64:	SpellEffectSummonWild(i);		return;
+    case 881:         
+    case 2301:  SpellEffectSummonGuardian(i);   return;  
+    case 64:	SpellEffectSummonWild(i);		return;
 	case 65:
 	case 428:	SpellEffectSummonPossessed(i);	return;
 	case 66:	SpellEffectSummonDemon(i);		return;
@@ -6085,6 +6090,11 @@ void Spell::SpellEffectInterruptCast(uint32 i) // Interrupt Cast
 		}
 
 		unitTarget->SchoolCastPrevent[school] = duration + getMSTime();
+
+		if(unitTarget->IsPlayer())
+		{
+			TO_PLAYER(unitTarget)->SendPreventSchoolCast(school, duration + getMSTime());
+		}
 	}
 	else if((GetProto()->InterruptFlags & CAST_INTERRUPT_ON_INTERRUPT_ALL) && (prevtype == PREVENTION_TYPE_SILENCE))
 	{
@@ -6102,6 +6112,10 @@ void Spell::SpellEffectInterruptCast(uint32 i) // Interrupt Cast
 		for( uint8 j = 0; j < 7; j++)
 		{
 			unitTarget->SchoolCastPrevent[j] = duration + getMSTime();
+			if(unitTarget->IsPlayer())
+			{
+				TO_PLAYER(unitTarget)->SendPreventSchoolCast(j, duration + getMSTime());
+			}
 		}
 	}
 }
@@ -7700,15 +7714,17 @@ void Spell::SpellEffectDisenchant( uint32 i )
 
 void Spell::SpellEffectInebriate(uint32 i) // lets get drunk!
 {
-	if(!p_caster) return;
+	if( playerTarget == NULL )
+		return;
 
 	// Drunkee!
-	uint8 b2 = m_caster->GetByte(PLAYER_BYTES_3,1);
-	b2 += static_cast<uint8>( damage );	// 10 beers will get you smassssshed!
-
-	m_caster->SetByte(PLAYER_BYTES_3,1,b2>90?90:b2);
-	sEventMgr.RemoveEvents(p_caster, EVENT_PLAYER_REDUCEDRUNK);
-	sEventMgr.AddEvent(p_caster, &Player::EventReduceDrunk, false, EVENT_PLAYER_REDUCEDRUNK, 300000, 0,EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
+	uint16 currentDrunk = playerTarget->GetDrunkValue();
+	uint16 drunkMod = static_cast<uint16>(damage) * 256;
+	if( currentDrunk + drunkMod > 0xFFFF )
+		currentDrunk = 0xFFFF;
+	else
+		currentDrunk += drunkMod;
+	playerTarget->SetDrunkValue( currentDrunk, i_caster ? i_caster->GetEntry() : 0 );
 }
 
 void Spell::SpellEffectFeedPet(uint32 i)  // Feed Pet
@@ -7814,10 +7830,8 @@ void Spell::SpellEffectSummonObjectSlot(uint32 i)
 		GoSummon->checkrate = 1;
 		sEventMgr.AddEvent(GoSummon, &GameObject::TrapSearchTarget, EVENT_GAMEOBJECT_TRAP_SEARCH_TARGET, 100, 0,0);
 	}
-	else
-	{
-		sEventMgr.AddEvent(GoSummon, &GameObject::ExpireAndDelete, EVENT_GAMEOBJECT_EXPIRE, GetDuration(), 1,0);
-	}
+	sEventMgr.AddEvent(GoSummon, &GameObject::ExpireAndDelete, EVENT_GAMEOBJECT_EXPIRE, GetDuration(), 1,0); 
+
 	GoSummon->PushToWorld(m_caster->GetMapMgr());
 	GoSummon->SetSummoned(u_caster);
 	u_caster->m_ObjectSlots[slot] = GoSummon->GetUIdFromGUID();

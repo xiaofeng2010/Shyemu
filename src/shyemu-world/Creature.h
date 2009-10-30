@@ -118,7 +118,7 @@ struct CreatureProto
 	float RangedMinDamage;
 	float RangedMaxDamage;
 	uint32 RespawnTime;
-	uint32 Resistances[6];
+	uint32 Resistances[7];
 	float CombatReach;
 	float BoundingRadius;
 	char * aura_string;

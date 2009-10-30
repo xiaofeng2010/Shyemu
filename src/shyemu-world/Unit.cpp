@@ -5824,6 +5824,29 @@ uint32 Unit::AbsorbDamage( uint32 School, uint32* dmg )
 				}
 			}
 
+			switch((*j)->spellid)
+		    {
+			case 11426: // Ice Barrier Ranks
+			case 13031:
+			case 13032:
+			case 13033:
+			case 27134:
+			case 33405:
+			case 43038:
+			case 43039:
+				    {
+						if(HasAura(54787))
+						{
+							CastSpell(this, 55080, true);
+						}
+						else if ( HasAura(44745) )
+						{
+							if( Rand(50.0f) )
+								    CastSpell(this, 55080, true);
+						}
+				}break;
+			}
+
 			this->RemoveAura((*j)->spellid); //,(*j)->caster);
 			if(!*dmg)//absorbed all dmg
 				break;

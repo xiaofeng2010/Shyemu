@@ -21,7 +21,7 @@
 #ifndef __STDAFX_H
 #define __STDAFX_H
 
-#pragma warning( disable : 4146 4244 )
+#pragma warning( disable : 4146 4244 4355 )
 
 #ifdef min
 #undef min

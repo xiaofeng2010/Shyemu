@@ -1225,6 +1225,8 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recv_data)
 			sLog.outDebug( "MISC: Added Spell %u into button %u", action, button );
 			GetPlayer()->setAction(button,action,type,misc);
 		}
+
+		GetPlayer()->_SaveActionBarsToDB(NULL);
 	}
 
 #ifdef OPTIMIZED_PLAYER_SAVING
@@ -1414,13 +1416,12 @@ void WorldSession::HandleGameObjectUse(WorldPacket & recv_data)
 
 	_player->RemoveStealth(); // cebernic:RemoveStealth due to GO was using. Blizzlike
 
-	switch (obj->GetInfo()->Type)
+	uint32 type = obj->GetByte(GAMEOBJECT_BYTES_1, 1);
+	switch(obj->GetInfo()->Type)
 	{
-		Log.Notice("TEST","CONNNNNNNNNNNNNNNNNNNNNNNS");
-		
+	
 		case GAMEOBJECT_TYPE_CHAIR:
 		{
-			Log.Notice("TEST","Chaisse");
 			/*WorldPacket data(MSG_MOVE_HEARTBEAT, 66);
 			data << plyr->GetNewGUID();
 			data << uint8(0);
@@ -1531,7 +1532,6 @@ void WorldSession::HandleGameObjectUse(WorldPacket & recv_data)
 	
 		case GAMEOBJECT_TYPE_RITUAL:
 		{
-			Log.Notice("TEST","Rituel");
 			// store the members in the ritual, cast sacrifice spell, and summon.
 			uint32 i = 0;
 			if(!obj->m_ritualmembers || !obj->m_ritualspell || !obj->m_ritualcaster /*|| !obj->m_ritualtarget*/)

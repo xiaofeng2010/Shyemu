@@ -4531,7 +4531,8 @@ void ApplyNormalFixes()
 			sp->Effect[0] = 50;
 			sp->EffectImplicitTargetA[0] = 52;
 			sp->EffectRadiusIndex[0] = 7;
-			sp->EffectMiscValue[0] = 3000000; //Gameobject in DB
+			sp->EffectMiscValue[0] = 181102; //Gameobject in DB
+
 		}
 
 		sp = dbcSpell.LookupEntryForced( 27870 );
@@ -4540,7 +4541,8 @@ void ApplyNormalFixes()
 			sp->Effect[0] = 50;
 			sp->EffectImplicitTargetA[0] = 52;
 			sp->EffectRadiusIndex[0] = 7;
-			sp->EffectMiscValue[0] = 3000001; //Gameobject in DB
+			sp->EffectMiscValue[0] = 181105; //Gameobject in DB
+
 		}
 
 		sp = dbcSpell.LookupEntryForced( 27871 );
@@ -4549,7 +4551,8 @@ void ApplyNormalFixes()
 			sp->Effect[0] = 50;
 			sp->EffectImplicitTargetA[0] = 52;
 			sp->EffectRadiusIndex[0] = 7;
-			sp->EffectMiscValue[0] = 3000002; //Gameobject in DB
+			sp->EffectMiscValue[0] = 181106; //Gameobject in DB
+
 		}
 
 		sp = dbcSpell.LookupEntryForced( 28275 );
@@ -4558,7 +4561,8 @@ void ApplyNormalFixes()
 			sp->Effect[0] = 50;
 			sp->EffectImplicitTargetA[0] = 52;
 			sp->EffectRadiusIndex[0] = 7;
-			sp->EffectMiscValue[0] = 3000003; //Gameobject in DB
+			sp->EffectMiscValue[0] = 1811020; //Gameobject in DB (Couldnt find correct object id)
+
 		}
 
 		sp = dbcSpell.LookupEntryForced( 48086 );
@@ -4567,7 +4571,7 @@ void ApplyNormalFixes()
 			sp->Effect[0] = 50;
 			sp->EffectImplicitTargetA[0] = 52;
 			sp->EffectRadiusIndex[0] = 7;
-			sp->EffectMiscValue[0] = 3000004; //Gameobject in DB
+			sp->EffectMiscValue[0] = 1811021; //Gameobject in DB (Couldnt find correct object id)
 		}
 
 		sp = dbcSpell.LookupEntryForced( 48087 );
@@ -4576,11 +4580,12 @@ void ApplyNormalFixes()
 			sp->Effect[0] = 50;
 			sp->EffectImplicitTargetA[0] = 52;
 			sp->EffectRadiusIndex[0] = 7;
-			sp->EffectMiscValue[0] = 3000005; //Gameobject in DB
+			sp->EffectMiscValue[0] = 1811022; //Gameobject in DB (Couldnt find correct object id)
+
 		}
 
 
-		//Grace Rank 1
+		// Grace Rank 1
 		sp = dbcSpell.LookupEntryForced(47516);
 		if(sp != NULL)
 		{
@@ -4588,7 +4593,7 @@ void ApplyNormalFixes()
 			sp->proc_interval = 100;
 		}
 
-		//Grace Rank 2
+		// Grace Rank 2
 		sp = dbcSpell.LookupEntryForced(47517);
 		if(sp != NULL)
 		{

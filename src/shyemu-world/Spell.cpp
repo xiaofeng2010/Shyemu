@@ -1193,7 +1193,7 @@ uint8 Spell::prepare( SpellCastTargets * targets )
 {
 	uint8 ccr;
 
-	Log.Notice("spell", "failure = %u", CanCast(false));
+	Log.Debug("spell", "failure = %u", CanCast(false));
 	//Log.Notice("spell", "targe = %u", m_spellInfo->StartRecoveryCategory);
 	// In case spell got cast from a script check fear/wander states
 	if (!p_caster && u_caster && u_caster->GetAIInterface())

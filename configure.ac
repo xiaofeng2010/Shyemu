@@ -1,9 +1,9 @@
 ## Process this file with autoconf to produce a configure script.
 
-AC_INIT([ArcEmu],
-        [1.5],
-        [www.arcemu.org],
-        [arcemu])
+AC_INIT([ShyEMU],
+        [0.1],
+        [www.shyemu.com],
+        [shyemu])
 
 AC_PREREQ(2.5)
 
@@ -265,10 +265,10 @@ AC_DEFINE_UNQUOTED([SVN_REVISION_DONE], `sh ./extract_svn_revision.sh`, [SVN rev
 AC_CONFIG_FILES([
    Makefile
    src/Makefile
-   src/arcemu-shared/Makefile
-   src/arcemu-world/Makefile
-   src/arcemu-logonserver/Makefile
-   src/arcemu-crashreport/Makefile
+   src/shyemu-shared/Makefile
+   src/shyemu-world/Makefile
+   src/shyemu-logonserver/Makefile
+   src/shyemu-crashreport/Makefile
    src/scripts/Makefile
    src/scripts/src/Makefile
    src/scripts/src/GossipScripts/Makefile
@@ -287,7 +287,7 @@ AC_OUTPUT
 
 echo
 echo "===================================="
-echo "ArcEmu configure report:"
+echo "ShyEmu configure report:"
 echo
 echo " Core:" 
 echo "             os: ${OSNAME}"

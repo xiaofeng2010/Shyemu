@@ -570,6 +570,18 @@ void WorldSession::HandleAuctionSellItem( WorldPacket & recv_data )
 	if (!_player->IsInWorld())
 		return;
 
+	/*
+	CLIENT VERSION : 3.2.2a
+	OPCODE: CMSG_AUCTION_SELL_ITEM (0x0256)
+	DATA:
+	6F 3D 01 0F 22 00 30 F1 // uint64 (8 bytes), vendor guid
+	01 00 00 00 // unk 3.2.2 uint32 (4 bytes), always 0x01?
+	64 00 00 00 00 00 00 40 // uint64 (8 bytes), item guid
+	00 00 00 00 // unk 3.2.2 uint32 (4 bytes), always 0x00?
+	74 27 00 00 // uint32 (4 bytes), bid
+	00 00 00 00 // uint32 (4 bytes), byout
+	A0 05 00 00 // uint32 (4 bytes), etime */
+	
 	uint64 guid,item;
 	uint32 bid, buyout, etime, unk1, unk2;	// etime is in minutes
 

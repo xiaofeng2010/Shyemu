@@ -1,7 +1,7 @@
 /*
- * shyemu MMORPG Server
+ * ShyEMU MMORPG Server
  * Copyright (C) 2005-2007 Ascent Team <http://www.ascentemu.com/>
- * Copyright (C) 2008-2009 <http://www.shyemu.org/>
+ * Copyright (C) 2008-2009 <http://www.shyemu.com/>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -554,6 +554,11 @@ uint8 WorldSession::DeleteCharacter(uint32 guid)
 			CharacterDatabase.Execute("DELETE FROM character_achievement WHERE guid = '%u' AND achievement NOT IN (457, 467, 466, 465, 464, 463, 462, 461, 460, 459, 458, 1404, 1405, 1406, 1407, 1408, 1409, 1410, 1411, 1412, 1413, 1415, 1414, 1416, 1417, 1418, 1419, 1420, 1421, 1422, 1423, 1424, 1425, 1426, 1427, 1463, 1400, 456, 1402)",(uint32)guid);
 			CharacterDatabase.Execute("DELETE FROM character_achievement_progress WHERE guid = '%u'",(uint32)guid);
 
+			CharacterDatabase.Execute("DELETE FROM playeractionbars WHERE guid=%u",(uint32)guid);
+			CharacterDatabase.Execute("DELETE FROM playerglyphs WHERE guid=%u",(uint32)guid);
+			CharacterDatabase.Execute("DELETE FROM playertalents WHERE guid=%u",(uint32)guid);
+			CharacterDatabase.Execute("DELETE FROM playerspells WHERE guid=%u",(uint32)guid);
+
 			/* remove player info */
 			objmgr.DeletePlayerInfo((uint32)guid);
 			return E_CHAR_DELETE_SUCCESS;
@@ -929,16 +934,16 @@ void WorldSession::FullLogin(Player * plr)
 
 	// Send revision (if enabled)
 #ifdef WIN32
-	_player->BroadcastMessage("Powered by: ShyEMU Rev: %s%u  ((Please have fun)", MSG_COLOR_WHITE, BUILD_TAG,
+	_player->BroadcastMessage("Powered by: %sShyEMU %s - %s-Windows-%s" "((Please have fun)", MSG_COLOR_WHITE, BUILD_TAG,
 		CONFIG, ARCH, MSG_COLOR_LIGHTBLUE);		
 	_player->BroadcastMessage("Revision: %s%u", MSG_COLOR_RED, BUILD_REVISION); 
 #else
-	_player->BroadcastMessage("Powered by: ShyEMU Rev: %s%u  ((Please have fun)", MSG_COLOR_WHITE, BUILD_TAG,
+	_player->BroadcastMessage("Powered by: %sShyEMU %s - %s-Windows-%s" "((Please have fun)", MSG_COLOR_WHITE, BUILD_TAG,
 		PLATFORM_TEXT, ARCH, MSG_COLOR_LIGHTBLUE);
 	_player->BroadcastMessage("Revision: %s%u", MSG_COLOR_RED, BUILD_REVISION); 
 #endif
 	// Recruitment message :)
-	//_player->BroadcastMessage("shyemu is recruiting developers: Join us on irc.emulationnetwork.com:6667 #shyemu");
+	//_player->BroadcastMessage("ShyEMU is recruiting developers: Join us on irc.emulationnetwork.com:6667 #shyemu");
 	if(sWorld.SendStatsOnJoin || HasGMPermissions() )
 	{
 		_player->BroadcastMessage("Online Players: %s%u |rPeak: %s%u|r Accepted Connections: %s%u",
