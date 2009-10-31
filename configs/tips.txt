@@ -7,7 +7,7 @@ There's no app restarter needed...or u want kill process on time specified unles
 BAT would be great something like:
 ==================================
 :go
-arcemu-world.exe
+shyemu-world.exe
 goto go
 ==================================
 save the contents and name a file to Restarter.bat put it into same directory of arcemu-world.exe

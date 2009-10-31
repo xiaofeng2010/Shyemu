@@ -1964,7 +1964,7 @@ void ApplyNormalFixes()
 		if( sp != NULL )
 			sp->procFlags |= PROC_TARGET_SELF;
 
-		// Warrior - Sudden Death Rank 1
+		// Sudden Death Rank 1
 		sp = dbcSpell.LookupEntryForced( 29723 );
 		if(sp != NULL)
 		{
@@ -1973,7 +1973,7 @@ void ApplyNormalFixes()
 			sp->procChance = 3;
 		}		
 
-		// Warrior - Sudden Death Rank 2
+		// Sudden Death Rank 2
 		sp = dbcSpell.LookupEntryForced( 29725 );
 		if(sp != NULL)
 		{
@@ -1982,7 +1982,7 @@ void ApplyNormalFixes()
 			sp->procChance = 6;
 		}	
 
-		// Warrior - Sudden Death Rank 3
+		// Sudden Death Rank 3
 		sp = dbcSpell.LookupEntryForced( 29724 );
 		if(sp != NULL)
 		{
@@ -2379,6 +2379,13 @@ void ApplyNormalFixes()
 			sp->EffectTriggerSpell[1] = 12798;
 			sp->procFlags = PROC_ON_CAST_SPECIFIC_SPELL;
 			sp->procChance = 50;
+		}
+
+		// Spell Reflection
+		sp = dbcSpell.LookupEntryForced ( 23920 );
+		if( sp != NULL)
+		{
+			sp->EffectApplyAuraName[1] = 74;
 		}
 
 		// Intervene  Ranger: stop attack
@@ -5394,112 +5401,69 @@ void ApplyNormalFixes()
 
 	// Insert mage spell fixes here
 
-		//Soufle de dragon...
-		sp = dbcSpell.LookupEntryForced( 31661 );
-        if( sp != NULL )
-        {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
-        }
-		sp = dbcSpell.LookupEntryForced( 33041 );
-        if( sp != NULL )
-        {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
-        }
-		sp = dbcSpell.LookupEntryForced( 33042 );
-        if( sp != NULL )
-        {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
-        }
-		sp = dbcSpell.LookupEntryForced( 33043 );
-        if( sp != NULL )
-        {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
-        }
-		sp = dbcSpell.LookupEntryForced( 42949 );
-        if( sp != NULL )
-        {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
-        }
-		sp = dbcSpell.LookupEntryForced( 42950 );
-        if( sp != NULL )
-        {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
-        }
-		//Cone de froid
+		
+		// Cone of Cold
 		sp = dbcSpell.LookupEntryForced( 120 );
         if( sp != NULL )
         {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
+			sp->EffectApplyAuraName[1] = 33;
+			sp->EffectMiscValue[0] = -50;
+			sp->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;		
         }
 		sp = dbcSpell.LookupEntryForced( 8492 );
         if( sp != NULL )
         {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
+			sp->EffectApplyAuraName[1] = 33;
+			sp->EffectMiscValue[0] = -50;
+			sp->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;
         }
 		sp = dbcSpell.LookupEntryForced( 10159 );
         if( sp != NULL )
         {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
+			sp->EffectApplyAuraName[1] = 33;
+			sp->EffectMiscValue[0] = -50;
+			sp->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;		
         }
 		sp = dbcSpell.LookupEntryForced( 10160 );
         if( sp != NULL )
         {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
+			sp->EffectApplyAuraName[1] = 33;
+			sp->EffectMiscValue[0] = -50;
+			sp->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;
         }
 		sp = dbcSpell.LookupEntryForced( 10161 );
         if( sp != NULL )
         {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
+			sp->EffectApplyAuraName[1] = 33;
+			sp->EffectMiscValue[0] = -50;
+			sp->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;
         }
 		sp = dbcSpell.LookupEntryForced( 27087 );
         if( sp != NULL )
         {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
+			sp->EffectApplyAuraName[1] = 33;
+			sp->EffectMiscValue[0] = -50;
+			sp->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;	
         }
 		sp = dbcSpell.LookupEntryForced( 42930);
         if( sp != NULL )
         {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
+			sp->EffectApplyAuraName[1] = 33;
+			sp->EffectMiscValue[0] = -50;
+			sp->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;
         }
 		sp = dbcSpell.LookupEntryForced( 42931);
         if( sp != NULL )
         {
-			sp->EffectImplicitTargetA[0] = 24;
-			sp->EffectImplicitTargetA[1] = 24;
-			sp->EffectImplicitTargetA[2] = 24;
+			sp->EffectApplyAuraName[1] = 33;
+			sp->EffectMiscValue[0] = -50;
+			sp->Effect[1] = SPELL_EFFECT_SCHOOL_DAMAGE;
         }
 		
 		//Missile Barrage Rank 1
 		sp = dbcSpell.LookupEntryForced( 44404 );
         if( sp != NULL )
         {
-			sp->EffectTriggerSpell[0] = 44401;
 			sp->procFlags = PROC_ON_CAST_SPELL;
 			sp->procChance = 4;
         }
@@ -5508,7 +5472,6 @@ void ApplyNormalFixes()
 		sp = dbcSpell.LookupEntryForced( 54486 );
         if( sp != NULL )
         {
-			sp->EffectTriggerSpell[0] = 44401;
 			sp->procFlags = PROC_ON_CAST_SPELL;
 			sp->procChance = 8;
         }
@@ -5517,7 +5480,6 @@ void ApplyNormalFixes()
 		sp = dbcSpell.LookupEntryForced( 54488 );
         if( sp != NULL )
         {
-			sp->EffectTriggerSpell[0] = 44401;
 			sp->procFlags = PROC_ON_CAST_SPELL;
 			sp->procChance = 12;
         }
@@ -5526,7 +5488,6 @@ void ApplyNormalFixes()
 		sp = dbcSpell.LookupEntryForced( 54489 );
         if( sp != NULL )
         {
-			sp->EffectTriggerSpell[0] = 44401;
 			sp->procFlags = PROC_ON_CAST_SPELL;
 			sp->procChance = 16;
         }
@@ -5535,7 +5496,6 @@ void ApplyNormalFixes()
 		sp = dbcSpell.LookupEntryForced( 54490 );
         if( sp != NULL )
         {
-			sp->EffectTriggerSpell[0] = 44401;
 			sp->procFlags = PROC_ON_CAST_SPELL;
 			sp->procChance = 20;
         }
@@ -5545,7 +5505,7 @@ void ApplyNormalFixes()
 		if( sp != NULL )
 		{
 			sp->Effect[0] = SPELL_EFFECT_APPLY_AURA;
-			sp->Effect[1]=0;
+			sp->Effect[1] = 0;
 			sp->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
 			sp->EffectTriggerSpell[0] = 48108;
 			sp->procChance= 33;
@@ -5558,7 +5518,7 @@ void ApplyNormalFixes()
 		if( sp != NULL )
 		{
 			sp->Effect[0] = SPELL_EFFECT_APPLY_AURA;
-			sp->Effect[1]=0;
+			sp->Effect[1] = 0;
 			sp->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
 			sp->EffectTriggerSpell[0] = 48108;
 			sp->procChance= 66;
@@ -5571,7 +5531,7 @@ void ApplyNormalFixes()
 		if( sp != NULL )
 		{
 			sp->Effect[0] = SPELL_EFFECT_APPLY_AURA;
-			sp->Effect[1]=0;
+			sp->Effect[1] = 0;
 			sp->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
 			sp->EffectTriggerSpell[0] = 48108;
 			sp->procChance= 100;
@@ -5579,20 +5539,32 @@ void ApplyNormalFixes()
 			sp->procCharges = 0;
 		}
 
-		// Brain Freeze rank 1
+		// Brain Freeze Rank 1
 		sp = dbcSpell.LookupEntryForced( 44546 );
 		if(sp != NULL)
+		{
 			sp->EffectApplyAuraName[0] = SPELL_AURA_DUMMY;
+		    sp->procFlags = PROC_ON_CAST_SPELL;
+		    sp->procChance = 5;
+		}
 
-		// Brain Freeze rank 2
+		// Brain Freeze Rank 2
 		sp = dbcSpell.LookupEntryForced( 44548 );
 		if(sp != NULL)
+		{
 			sp->EffectApplyAuraName[0] = SPELL_AURA_DUMMY;
+		    sp->procFlags = PROC_ON_CAST_SPELL;
+		    sp->procChance = 10;
+		}
 
-		// Brain Freeze rank 3
+		// Brain Freeze Rank 3
 		sp = dbcSpell.LookupEntryForced( 44549 );
 		if(sp != NULL)
+		{
 			sp->EffectApplyAuraName[0] = SPELL_AURA_DUMMY;
+		    sp->procFlags = PROC_ON_CAST_SPELL;
+		    sp->procChance = 15;
+		}
 
 		// Firestarter Rank 1
 		sp = dbcSpell.LookupEntryForced( 54741 );
@@ -5631,19 +5603,52 @@ void ApplyNormalFixes()
 			sp->procFlags	=	PROC_ON_CAST_SPELL;
 		}*/
 
-		// Fingers of Frost Rank 1
+			//Fingers of Frost
 		sp = dbcSpell.LookupEntryForced( 44543 );
-		if(sp != NULL)
-			sp->EffectApplyAuraName[0] = SPELL_AURA_DUMMY;
-
-		// Fingers of Frost Rank 2
+		if( sp != NULL)
+				{
+					sp->procFlags	=	PROC_ON_CAST_SPELL;
+					sp->procChance	=	5;
+				}
 		sp = dbcSpell.LookupEntryForced( 44545 );
-		if(sp != NULL)
-			sp->EffectApplyAuraName[0] = SPELL_AURA_DUMMY;
+		if( sp != NULL)
+				{
+					sp->procFlags	=	PROC_ON_CAST_SPELL;
+					sp->procChance	=	10;
+				}
 
+			//Frostbite
+		sp = dbcSpell.LookupEntryForced( 11071 );
+		if( sp != NULL)
+				{
+						sp->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
+						sp->EffectTriggerSpell[0] = 12494;
+						sp->procFlags = PROC_ON_CAST_SPELL;
+						sp->procChance = sp->EffectBasePoints[0];
+				}
+
+			//Frostbite
+		sp = dbcSpell.LookupEntryForced( 12496 );
+		if( sp != NULL)
+				{
+						sp->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
+						sp->EffectTriggerSpell[0] = 12494;
+						sp->procFlags = PROC_ON_CAST_SPELL;
+						sp->procChance = sp->EffectBasePoints[0];
+				}
+
+			//Frostbite
+		sp = dbcSpell.LookupEntryForced( 12497 );
+		if( sp != NULL)
+				{
+						sp->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
+						sp->EffectTriggerSpell[0] = 12494;
+						sp->procFlags = PROC_ON_CAST_SPELL;
+						sp->procChance = sp->EffectBasePoints[0];
+				}
 		// Incanter's Absorption Rank 1
 		sp = dbcSpell.LookupEntryForced( 44413 );
-		if(sp != NULL)
+		if( sp != NULL)
 		{
 			sp->EffectTriggerSpell[0] = 44394;
 			sp->procFlags = PROC_ON_ABSORB;
@@ -5651,7 +5656,7 @@ void ApplyNormalFixes()
 		}
         // Incanter's Absorption Rank 2
         sp = dbcSpell.LookupEntryForced( 44413 );
-		if(sp != NULL)
+		if( sp != NULL)
 		{
 			sp->EffectTriggerSpell[0] = 44395;
 			sp->procFlags = PROC_ON_ABSORB;
@@ -5659,12 +5664,75 @@ void ApplyNormalFixes()
 		}
 		// Incanter's Absorption Rank 3
         sp = dbcSpell.LookupEntryForced( 44413 );
-		if(sp != NULL)
+		if( sp != NULL)
 		{
 			sp->EffectTriggerSpell[0] = 44396;
 			sp->procFlags = PROC_ON_ABSORB;
 			sp->procChance = 100;
 		}
+
+        // Mage Armor Rank 1
+		sp = dbcSpell.LookupEntryForced ( 6117 );
+		if( sp != NULL)
+		{
+			sp->EffectApplyAuraName[1] = 22;
+			sp->EffectMiscValue[0] = 5;
+			sp->EffectApplyAuraName[2] = 134;
+			sp->EffectMiscValue[1] = 50;
+		}
+
+		// Mage Armor Rank 2
+		sp = dbcSpell.LookupEntryForced ( 22782 );
+		if( sp != NULL)
+		{
+			sp->EffectApplyAuraName[1] = 22;
+			sp->EffectMiscValue[0] = 5;
+			sp->EffectApplyAuraName[2] = 134;
+			sp->EffectMiscValue[1] = 50;
+		}
+
+		// Mage Armor Rank 3
+		sp = dbcSpell.LookupEntryForced ( 22783 );
+		if( sp != NULL)
+		{
+			sp->EffectApplyAuraName[1] = 22;
+			sp->EffectMiscValue[0] = 5;
+			sp->EffectApplyAuraName[2] = 134;
+			sp->EffectMiscValue[1] = 50;
+		}
+        
+		// Mage Armor Rank 4
+		sp = dbcSpell.LookupEntryForced ( 27125 );
+		if( sp != NULL)
+		{
+			sp->EffectApplyAuraName[1] = 22;
+			sp->EffectMiscValue[0] = 5;
+			sp->EffectApplyAuraName[2] = 134;
+			sp->EffectMiscValue[1] = 50;
+		}
+
+		// Mage Armor Rank 5
+		sp = dbcSpell.LookupEntryForced ( 43023 );
+		if( sp != NULL)
+		{
+			sp->EffectApplyAuraName[1] = 22;
+			sp->EffectMiscValue[0] = 5;
+			sp->EffectApplyAuraName[2] = 134;
+			sp->EffectMiscValue[1] = 50;
+		}
+
+		// Mage Armor Rank 6
+		sp = dbcSpell.LookupEntryForced ( 43024 );
+		if( sp != NULL)
+		{
+			sp->EffectApplyAuraName[1] = 22;
+			sp->EffectMiscValue[0] = 5;
+			sp->EffectApplyAuraName[2] = 134;
+			sp->EffectMiscValue[1] = 50;
+		}
+
+
+
 		/**********************************************************
 		*    Improved Blink by Alice
 		**********************************************************/
@@ -5995,17 +6063,6 @@ void ApplyNormalFixes()
 		sp = dbcSpell.LookupEntryForced( 31642 );
 		if( sp != NULL )
 			sp->EffectTriggerSpell[0] = 31643;
-
-		//mage talent "frostbyte". we make it to be dummy
-		sp = dbcSpell.LookupEntryForced( 11071 );
-		if( sp != NULL )
-			sp->EffectApplyAuraName[0] = SPELL_AURA_DUMMY;
-		sp = dbcSpell.LookupEntryForced( 12496 );
-		if( sp != NULL )
-			sp->EffectApplyAuraName[0] = SPELL_AURA_DUMMY;
-		sp = dbcSpell.LookupEntryForced( 12497 );
-		if( sp != NULL )
-			sp->EffectApplyAuraName[0] = SPELL_AURA_DUMMY;
 
 		//Mage - Improved Scorch
 		sp = dbcSpell.LookupEntryForced( 11095 );

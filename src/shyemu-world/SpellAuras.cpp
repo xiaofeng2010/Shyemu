@@ -2779,15 +2779,6 @@ void Aura::SpellAuraDummy(bool apply)
 				static_cast< Player* >( m_target )->m_IncreaseDmgSnaredSlowed += ((apply) ? 1:-1)*(uint32)(((float)mod->m_amount)/100);
 			}
 		}break;
-	// Mage - Frostbite talent
-	case 11071:
-	case 12496:
-	case 12497:
-		{
-			Unit *caster = GetUnitCaster();
-			if(caster && caster->IsPlayer())
-				static_cast< Player* >(caster)->SetTriggerChill( 12494, mod->m_amount, false );
-		}break;
 	// Mage - Invisibility override
 	case 32612:
 		{
@@ -2796,14 +2787,6 @@ void Aura::SpellAuraDummy(bool apply)
 				p_target->m_mageInvisibility = apply;
 				p_target->UpdateVisibility();
 			}
-		}break;
-	// Mage - Fingers of Frost
-	case 44543:
-	case 44545:
-		{
-			Unit *caster = GetUnitCaster();
-			if(caster && caster->IsPlayer())
-				static_cast< Player* >(caster)->SetTriggerChill(44544,mod->m_amount, true);
 		}break;
 	// Mage - Brain Freeze 
 	case 44546:

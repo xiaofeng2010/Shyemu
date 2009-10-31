@@ -1197,23 +1197,7 @@ uint32 Unit::HandleProc( uint32 flag, Unit* victim, SpellEntry* CastingSpell, ui
 
 			switch( spellId )
 			{
-				 // Missile Barrage by Malacka
-			   case 44404:
-               case 54486:
-               case 54488:
-               case 54489:
-               case 54490:
-			   {
-				   Log.Notice("Missile", "barrage");
-					   if (CastingSpell == NULL)
-						   continue;
-					   /*if (CastingSpell->NameHash != SPELL_HASH_ARCANE_BLAST &&
-						   CastingSpell->NameHash != SPELL_HASH_FIREBALL && 
-                           CastingSpell->NameHash != SPELL_HASH_FROSTBOLT && 
-		                   CastingSpell->NameHash != SPELL_HASH_ARCANE_BARRAGE &&
-                           CastingSpell->NameHash != SPELL_HASH_FROSTFIRE_BOLT)
-						   continue;*/
-			    }break;
+
 				case 32747: //Deadly Throw Interrupt (rogue arena gloves set)
 					{
 						if( CastingSpell == NULL )
@@ -1699,6 +1683,20 @@ uint32 Unit::HandleProc( uint32 flag, Unit* victim, SpellEntry* CastingSpell, ui
 						if( CastingSpell->NameHash != SPELL_HASH_SCORCH ) //Scorch
 							continue;
 					}break;
+
+                //mage - Brain Freeze
+				case 44546:
+				case 44548:
+				case 44549:
+					{
+					    if( CastingSpell == NULL )
+							continue;
+						if( CastingSpell->NameHash != SPELL_HASH_FROSTBOLT &&
+							CastingSpell->NameHash != SPELL_HASH_CONE_OF_COLD );
+							
+					}break;
+
+
 				//mage - Combustion
 				case 28682:
 					{
