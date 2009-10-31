@@ -1459,10 +1459,12 @@ void ApplyNormalFixes()
 			sp->targetAuraSpellNot = 0;
 		}break;
 		sp = dbcSpell.LookupEntryForced( 48020 );
-		if( sp != NULL )
+		if (sp != NULL)
 		{
+			sp->targetAuraSpellNot = 0;
+			sp->targetAuraSpell = 0;
 			sp->Effect[1] = SPELL_EFFECT_DUMMY;
-		}break;
+		}
 		//////////////////////////////////////////
 		// DRUID								//
 		//////////////////////////////////////////
@@ -5509,7 +5511,7 @@ void ApplyNormalFixes()
 			sp->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
 			sp->EffectTriggerSpell[0] = 48108;
 			sp->procChance= 33;
-			sp->procFlags = PROC_ON_SPELL_HIT | PROC_ON_SPELL_CRIT_HIT;
+			sp->procFlags = PROC_ON_SPELL_CRIT_HIT;
 			sp->procCharges = 0;
 		}
 
@@ -5522,7 +5524,7 @@ void ApplyNormalFixes()
 			sp->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
 			sp->EffectTriggerSpell[0] = 48108;
 			sp->procChance= 66;
-			sp->procFlags = PROC_ON_SPELL_HIT | PROC_ON_SPELL_CRIT_HIT;
+			sp->procFlags = PROC_ON_SPELL_CRIT_HIT;
 			sp->procCharges = 0;
 		}
 
@@ -5535,7 +5537,7 @@ void ApplyNormalFixes()
 			sp->EffectApplyAuraName[0] = SPELL_AURA_PROC_TRIGGER_SPELL;
 			sp->EffectTriggerSpell[0] = 48108;
 			sp->procChance= 100;
-			sp->procFlags = PROC_ON_SPELL_HIT | PROC_ON_SPELL_CRIT_HIT;
+			sp->procFlags = PROC_ON_SPELL_CRIT_HIT;
 			sp->procCharges = 0;
 		}
 
@@ -5834,9 +5836,6 @@ void ApplyNormalFixes()
 			sp->procFlags = PROC_ON_CAST_SPECIFIC_SPELL;
 			sp->ProcOnNameHash[1] = SPELL_HASH_ARCANE_BLAST;
 		}
-
-		// Updated ranks by Joker
-		// Arcane Blast
 		sp = dbcSpell.LookupEntryForced( 42894 );
 		if( sp != NULL )
 		{
@@ -5852,6 +5851,7 @@ void ApplyNormalFixes()
 			sp->EffectApplyAuraName[1] = SPELL_AURA_PROC_TRIGGER_SPELL;
 			sp->EffectTriggerSpell[1] = 36032;
 			sp->procFlags = PROC_ON_CAST_SPECIFIC_SPELL;
+			sp->ProcOnNameHash[1] = SPELL_HASH_ARCANE_BLAST;
 		}
 
 		sp = dbcSpell.LookupEntryForced( 42897 );
@@ -5860,13 +5860,14 @@ void ApplyNormalFixes()
 			sp->EffectApplyAuraName[1] = SPELL_AURA_PROC_TRIGGER_SPELL;
 			sp->EffectTriggerSpell[1] = 36032;
 			sp->procFlags = PROC_ON_CAST_SPECIFIC_SPELL;
+			sp->ProcOnNameHash[1] = SPELL_HASH_ARCANE_BLAST;
 		}
-	
+
 		//Mage - Arcane Blast Proc
 		sp = dbcSpell.LookupEntryForced( 36032 );
 		{
 			sp->procFlags = 0;
-			sp->maxstack = 3;
+			sp->maxstack = 4;
 			sp->procCharges = 0;
 			sp->c_is_flags |= SPELL_FLAG_IS_FORCEDDEBUFF;
 		}
@@ -6245,13 +6246,6 @@ void ApplyNormalFixes()
 		{
 			sp->BGR_one_buff_on_target = SPELL_TYPE_WARLOCK_IMMOLATE;
 			sp->EffectImplicitTargetA[0] = 24;
-		}
-		sp = dbcSpell.LookupEntryForced( 48020 );
-		if (sp != NULL)
-		{
-			sp->targetAuraSpellNot = 0;
-			sp->targetAuraSpell = 0;
-			sp->Effect[1] = SPELL_EFFECT_DUMMY;
 		}
 		sp = dbcSpell.LookupEntryForced( 47241 );
 		if (sp != NULL)

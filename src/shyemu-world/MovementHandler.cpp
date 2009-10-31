@@ -91,7 +91,11 @@ void WorldSession::HandleMoveWorldportAckOpcode( WorldPacket & recv_data )
 	}
 	else
 	{
-		_player->m_TeleportState = 2;
+		// don't overwrite the loading flag here.
+		// reason: talents/passive spells don't get cast on an invalid instance login
+		if( _player->m_TeleportState != 1 )
+			_player->m_TeleportState = 2;
+
 		_player->AddToWorld();
 	}
 }
@@ -808,6 +812,9 @@ void MovementInfo::init(WorldPacket & data)
 	{
 		data >> pitch;
 	}
+
+	data >> unklast;
+
 	if (flags & MOVEFLAG_FALLING || flags & MOVEFLAG_JUMPING)
 	{
 		data >> FallTime >> unk8 >> unk9 >> unk10;
@@ -817,7 +824,6 @@ void MovementInfo::init(WorldPacket & data)
 		data >> unk12;
 	}
 
-	data >> unklast;
 	if(data.rpos() != data.wpos())
 	{
 		if(data.rpos() + 4 == data.wpos())
@@ -841,6 +847,9 @@ void MovementInfo::write(WorldPacket & data)
 	{
 		data << pitch;
 	}
+
+	data << unklast;
+
 	if (flags & MOVEFLAG_FALLING)
 	{
 		data << FallTime << unk8 << unk9 << unk10;
@@ -849,7 +858,7 @@ void MovementInfo::write(WorldPacket & data)
 	{
 		data << unk12;
 	}
-	data << unklast;
+
 	if(unk13)
 		data << unk13;
 }

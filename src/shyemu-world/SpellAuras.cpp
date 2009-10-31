@@ -7729,143 +7729,89 @@ void Aura::SpellAuraModPowerRegPerc(bool apply)
 
 void Aura::SpellAuraOverrideClassScripts(bool apply)
 {
-	if(!GetUnitCaster())
-		return;
-	if(!GetUnitCaster()->IsPlayer())
-		return;
 	//misc value is spell to add
 	//spell familyname && grouprelation
-
-	Player *plr = static_cast< Player* >(GetUnitCaster());
 
 	//Adding bonus to effect
 	switch(mod->m_miscValue)
 	{
-	case 6953:
-		{
-			if(apply)
-				plr->SetFlag(UNIT_FIELD_AURASTATE, 0xF);
-			else
-				plr->RemoveFlag(UNIT_FIELD_AURASTATE, 0xF);
-		}break;
 		//----Shatter---
 		// Increases crit chance against rooted targets by (Rank * 10)%.
-		case 849:
-		case 910:
-		case 911:
-		case 912:
-		case 913:
-			if (m_target->IsPlayer())
+		case 849://*Shatter
+		case 910://*Shatter
+		case 911://*Shatter
+		case 912://*Shatter
+		case 913://*Shatter
 			{
-				int32 val = (apply) ? (mod->m_miscValue-908)*10 : -(mod->m_miscValue-908)*10;
-				if (mod->m_miscValue==849)
-					val = (apply) ? 10 : -10;
-				static_cast< Player* >( m_target )->m_RootedCritChanceBonus += val;
-			}
-			break;
-// ----?
-		case 3736:
-		case 4415:
-		case 4418:
-		case 4554:
-		case 4555:
-		case 4953:
-		case 5142:
-		case 5147:
-		case 5148:
-			{
-			if(apply)
-			{
-				OverrideIdMap::iterator itermap = objmgr.mOverrideIdMap.find(mod->m_miscValue);
-                if(itermap == objmgr.mOverrideIdMap.end())
-                 {
-                     sLog.outError("Unable to find override with overrideid: %u", mod->m_miscValue);
-                     break;
-                 }
-
-				std::list<SpellEntry *>::iterator itrSE = itermap->second->begin();
-
-				SpellOverrideMap::iterator itr = plr->mSpellOverrideMap.find((*itrSE)->Id);
-
-				if(itr != plr->mSpellOverrideMap.end())
+				if(m_target->IsPlayer())
 				{
-					ScriptOverrideList::iterator itrSO;
-					for(itrSO = itr->second->begin(); itrSO != itr->second->end(); ++itrSO)
-					{
-						if((*itrSO)->id == (uint32)mod->m_miscValue)
-						{
-							if((int32)(*itrSO)->damage > mod->m_amount)
-							{
-								(*itrSO)->damage = mod->m_amount;
-							}
-							return;
-						}
-					}
-					classScriptOverride *cso = new classScriptOverride;
-					cso->aura = 0;
-					cso->damage = mod->m_amount;
-					cso->effect = 0;
-					cso->id = mod->m_miscValue;
-					itr->second->push_back(cso);
+					int32 val = (apply) ? (mod->m_miscValue - 908) * 10 : -(mod->m_miscValue - 908) * 10;
+					if(mod->m_miscValue == 849)
+						val = (apply) ? 10 : -10;
+
+					TO_PLAYER(m_target)->m_RootedCritChanceBonus += val;
+				}
+			}break;
+		case 3736://*Increased Lesser Healing Wave
+		case 4415://*Increased Rejuvenation Healing
+		case 4418://*Increased Shock Damage
+		case 4554://*Increased Lightning Damage
+		case 4555://*Improved Moonfire
+		case 4953://*Increased Rejuvenation Healing
+		case 5142://*Increased Lightning Damage
+		case 5147://*Improved Consecration
+		case 5148://*Improved Starfire
+		case 5494://*Improved Mana Shield
+		case 5497://*Improved Mana Gems
+		case 5634://*Stormstrike AP Buff
+			{
+				if(apply)
+				{
+					classScriptOverride cso;
+					cso.id			= mod->m_miscValue;
+					cso.damage		= mod->m_amount;
+					cso.SpellGroups = (uint64)GetSpellProto()->EffectItemType[mod->i] + ((uint64)GetSpellProto()->EffectSpellGroupRelation_high[mod->i] << 32);
+
+					m_target->AddSpellOverride(cso);
 				}
 				else
 				{
-					classScriptOverride *cso = new classScriptOverride;
-					cso->aura = 0;
-					cso->damage = mod->m_amount;
-					cso->effect = 0;
-					cso->id = mod->m_miscValue;
-					ScriptOverrideList *lst = new ScriptOverrideList();
-					lst->push_back(cso);
-
-					for(;itrSE != itermap->second->end(); ++itrSE)
-					{
-						plr->mSpellOverrideMap.insert( SpellOverrideMap::value_type( (*itrSE)->Id, lst) );
-					}
-				}
-			}
-			else
-			{
-				OverrideIdMap::iterator itermap = objmgr.mOverrideIdMap.find(mod->m_miscValue);
-				SpellOverrideMap::iterator itr = plr->mSpellOverrideMap.begin(), itr2;
-				while(itr != plr->mSpellOverrideMap.end())
-				{
-					std::list<SpellEntry *>::iterator itrSE = itermap->second->begin();
-					for(;itrSE != itermap->second->end(); ++itrSE)
-					{
-						if(itr->first == (*itrSE)->Id)
-						{
-							itr2 = itr++;
-							plr->mSpellOverrideMap.erase(itr2);
-							break;
-						}
-					}
-					// Check if the loop above got to the end, if so it means the item wasn't found
-					// and the itr wasn't incremented so increment it now.
-					if(itrSE == itermap->second->end())      itr++;
-				}
-			}
-		}break;
-/*		case 19421: //hunter : Improved Hunter's Mark
-		case 19422:
-		case 19423:
-		case 19424:
-		case 19425:
-			{
-				//this should actually add a new functionality to the spell and not override it. There is a lot to decode and to be done here
-			}break;*/
-		case 4992: // Warlock: Soul Siphon
-		case 4993:
-			{
-				if(m_target) {
-					if( apply )
-						m_target->m_soulSiphon.max+= mod->m_amount;
-					else
-						m_target->m_soulSiphon.max-= mod->m_amount;
+					m_target->RemoveSpellOverride(mod->m_miscValue);
 				}
 			}break;
-	default:
-		sLog.outError("Unknown override report to devs: %u", mod->m_miscValue);
+		case 5481://*Starfire Bonus - pct
+			{
+				if(apply)
+				{
+					classScriptOverride cso;
+					cso.id			= mod->m_miscValue;
+					cso.damage		= mod->m_amount;
+					cso.percent		= true;
+					cso.SpellGroups = (uint64)GetSpellProto()->EffectItemType[mod->i] + ((uint64)GetSpellProto()->EffectSpellGroupRelation_high[mod->i] << 32);
+
+					m_target->AddSpellOverride(cso);
+				}
+				else
+				{
+					m_target->RemoveSpellOverride(mod->m_miscValue);
+				}
+			}break;
+		case 4992://*Warlock: Soul Siphon
+		case 4993://*Warlock: Soul Siphon
+			{
+				if(m_target) 
+				{
+					if(apply)
+						m_target->m_soulSiphon.max += mod->m_amount;
+					else
+						m_target->m_soulSiphon.max -= mod->m_amount;
+				}
+			}break;
+		case 2689://*Illumination
+			{
+			}break;
+		default:
+			sLog.outError("%s: Unknown override report to devs: %u", __FUNCTION__, mod->m_miscValue);
 	};
 }
 

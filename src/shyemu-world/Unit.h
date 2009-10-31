@@ -41,6 +41,7 @@ class DynamicObject;
 #define MAX_REMOVABLE_AURAS_END (MAX_NEGATIVE_AURAS_EXTEDED_END) //do we need to handle talents at all ?
 #define MAX_TOTAL_AURAS_START (MAX_PASSIVE_AURAS_START)
 #define MAX_TOTAL_AURAS_END (MAX_REMOVABLE_AURAS_END)
+#define MAX_AURAS 96 // 40 buff slots, 46 debuff slots.
 
 bool SERVER_DECL Rand(float);
 
@@ -804,7 +805,28 @@ enum AURA_CHECK_RESULT
 	AURA_CHECK_RESULT_LOWER_BUFF_PRESENT	= 3,
 };
 
+struct classScriptOverride
+{
+	classScriptOverride()
+	{
+		id				= 0;
+		effect			= 0;
+		aura			= 0;
+		damage			= 0;
+		percent			= false;
+		SpellGroups		= 0;
+	}
+
+	uint32 id;
+	uint32 effect;
+	uint32 aura;
+	int32 damage;
+	bool percent;
+	uint64 SpellGroups;
+};
+
 typedef std::list<struct ProcTriggerSpellOnSpell> ProcTriggerSpellOnSpellList;
+typedef std::list<classScriptOverride>				SpellOverrideList;
 
 /************************************************************************/
 /* "In-Combat" Handler                                                  */
@@ -869,7 +891,7 @@ protected:
 class SERVER_DECL Unit : public Object
 {
 public:
-	/************************************************************************/
+/************************************************************************/
 	/* LUA Stuff                                                            */
 	/************************************************************************/
 /*	typedef struct { const char *name; int(*mfunc)(lua_State*,Unit*); } RegType;
@@ -1039,6 +1061,8 @@ public:
 	Aura *FindAuraByNameHash(uint32 namehash);
 	Aura* FindAura(uint32 spellId);
 	Aura* FindAura(uint32 spellId, uint64 guid);
+	Aura* FindActiveAura(uint32 spellId, uint64 guid = 0);
+	Aura* FindActiveAuraWithNameHash(uint32 namehash, uint64 guid = 0);
 	bool SetAurDuration(uint32 spellId,Unit* caster,uint32 duration);
 	bool SetAurDuration(uint32 spellId,uint32 duration);
 	void DropAurasOnDeath();
@@ -1156,6 +1180,14 @@ public:
 	Unit * CreateTemporaryInfernal(uint32 guardian_entry,uint32 duration,float angle, uint32 lvl, float x, float y, float z);
 	void LiberationSceauPaladin(uint32 SealID, Unit * Target);
 	uint32 JugementID;
+
+	void AddSpellOverride(classScriptOverride & cso);
+	void RemoveSpellOverride(uint32 csoId);
+	int32 GetSpellOverrideDamage(SpellEntry const *spellInfo, int32 value) const;
+
+	//SpellAuraOverrideClassScripts
+	SpellOverrideList	m_SpellOverrideList;
+
 
 	//SM
 	int32 * SM_FDamageBonus;//flat

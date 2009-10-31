@@ -1225,8 +1225,6 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recv_data)
 			sLog.outDebug( "MISC: Added Spell %u into button %u", action, button );
 			GetPlayer()->setAction(button,action,type,misc);
 		}
-
-		GetPlayer()->_SaveActionBarsToDB(NULL);
 	}
 
 #ifdef OPTIMIZED_PLAYER_SAVING

@@ -2165,7 +2165,7 @@ out:
 				if( DemonicCircle->GetDistance2dSq(p_caster) > 40.0f )
 					p_caster->SendCastResult(48020, SPELL_FAILED_OUT_OF_RANGE, 0, 0);
 				else
-					p_caster->SafeTeleport( DemonicCircle->GetMapId(), DemonicCircle->GetInstanceID(), DemonicCircle->GetPosition()); //ok, wat u fixed? u understand? yah thanks :D
+					p_caster->SafeTeleport( DemonicCircle->GetMapId(), DemonicCircle->GetInstanceID(), DemonicCircle->GetPosition());
 
 			}
 		}break;
@@ -4304,6 +4304,304 @@ void Spell::SpellEffectSummon(uint32 i)
 			summon->AddSpell(dbcSpell.LookupEntry(58857), true); // Twin Howl
 			summon->AddSpell(dbcSpell.LookupEntry(58861), true); // Spirit Bash
 		}break;
+	case 5308:// Execute rank 1
+		{
+			if( u_caster == NULL|| !u_caster->IsInWorld() || !unitTarget || !unitTarget->IsInWorld() || !m_spellInfo)
+				return;
+
+			int32 value = m_spellInfo->EffectBasePoints[i]+1;
+			int32 rageUsed = p_caster->GetUInt32Value(UNIT_FIELD_POWER2);
+
+			int32 rageLeft = 0; // We use all available rage by default
+			Aura* suddenDeath = NULL;
+			suddenDeath = u_caster->FindActiveAura(52437);
+
+			if(suddenDeath != NULL && unitTarget->GetHealthPct() > 20)
+			{		
+				SpellEntry * sd = NULL;
+				sd = dbcSpell.LookupEntry(suddenDeath->pSpellId);
+				if(sd!=NULL)
+					rageLeft = sd->RankNumber > 1 ? sd->RankNumber * 30 + 10 : sd->RankNumber * 30;
+				unitTarget->RemoveAura(suddenDeath); // Sudden Death is removed after 1 execute
+				// With Sudden Death can only use up to 30 total rage. so 30-15 = 15 goes to execute damage
+				rageLeft = std::max(rageLeft, rageUsed - 150);
+				rageUsed = std::min(rageUsed, 150);
+			}
+
+			if( u_caster->HasAurasWithNameHash(SPELL_HASH_GLYPH_OF_EXECUTION))
+				rageUsed += 100; //Your Execute ability deals damage as if you had 10 additional rage.
+			
+			value += (int32) (rageUsed * m_spellInfo->dmg_multiplier[0]); 
+			u_caster->SetPower(POWER_TYPE_RAGE, rageLeft);
+			SpellEntry *spellInfo = dbcSpell.LookupEntry(20647);
+			u_caster->Strike(unitTarget,MELEE,spellInfo,0,0,value,false,false);
+		}break;
+
+
+	case 20658:// Execute rank 2
+		{
+			if( u_caster == NULL|| !u_caster->IsInWorld() || !unitTarget || !unitTarget->IsInWorld() || !m_spellInfo)
+				return;
+
+			int32 value = m_spellInfo->EffectBasePoints[i]+1;
+			int32 rageUsed = p_caster->GetUInt32Value(UNIT_FIELD_POWER2);
+
+			int32 rageLeft = 0; // We use all available rage by default
+			Aura* suddenDeath = NULL;
+			suddenDeath = u_caster->FindActiveAura(52437);
+
+			if(suddenDeath != NULL && unitTarget->GetHealthPct() > 20)
+			{		
+				SpellEntry * sd = NULL;
+				sd = dbcSpell.LookupEntry(suddenDeath->pSpellId);
+				if(sd!=NULL)
+					rageLeft = sd->RankNumber > 1 ? sd->RankNumber * 30 + 10 : sd->RankNumber * 30;
+				unitTarget->RemoveAura(suddenDeath); // Sudden Death is removed after 1 execute
+				// With Sudden Death can only use up to 30 total rage. so 30-15 = 15 goes to execute damage
+				rageLeft = std::max(rageLeft, rageUsed - 150);
+				rageUsed = std::min(rageUsed, 150);
+			}
+
+			if( u_caster->HasAurasWithNameHash(SPELL_HASH_GLYPH_OF_EXECUTION))
+				rageUsed += 100; //Your Execute ability deals damage as if you had 10 additional rage.
+			
+			value += (int32) (rageUsed * m_spellInfo->dmg_multiplier[0]); 
+			u_caster->SetPower(POWER_TYPE_RAGE, rageLeft);
+			SpellEntry *spellInfo = dbcSpell.LookupEntry(20647);
+			u_caster->Strike(unitTarget,MELEE,spellInfo,0,0,value,false,false);
+		}break;
+
+
+	case 20660:// Execute rank 3
+		{
+			if( u_caster == NULL|| !u_caster->IsInWorld() || !unitTarget || !unitTarget->IsInWorld() || !m_spellInfo)
+				return;
+
+			int32 value = m_spellInfo->EffectBasePoints[i]+1;
+			int32 rageUsed = p_caster->GetUInt32Value(UNIT_FIELD_POWER2);
+
+			int32 rageLeft = 0; // We use all available rage by default
+			Aura* suddenDeath = NULL;
+			suddenDeath = u_caster->FindActiveAura(52437);
+
+			if(suddenDeath != NULL && unitTarget->GetHealthPct() > 20)
+			{		
+				SpellEntry * sd = NULL;
+				sd = dbcSpell.LookupEntry(suddenDeath->pSpellId);
+				if(sd!=NULL)
+					rageLeft = sd->RankNumber > 1 ? sd->RankNumber * 30 + 10 : sd->RankNumber * 30;
+				unitTarget->RemoveAura(suddenDeath); // Sudden Death is removed after 1 execute
+				// With Sudden Death can only use up to 30 total rage. so 30-15 = 15 goes to execute damage
+				rageLeft = std::max(rageLeft, rageUsed - 150);
+				rageUsed = std::min(rageUsed, 150);
+			}
+
+			if( u_caster->HasAurasWithNameHash(SPELL_HASH_GLYPH_OF_EXECUTION))
+				rageUsed += 100; //Your Execute ability deals damage as if you had 10 additional rage.
+			
+			value += (int32) (rageUsed * m_spellInfo->dmg_multiplier[0]); 
+			u_caster->SetPower(POWER_TYPE_RAGE, rageLeft);
+			SpellEntry *spellInfo = dbcSpell.LookupEntry(20647);
+			u_caster->Strike(unitTarget,MELEE,spellInfo,0,0,value,false,false);
+		}break;
+
+	case 20661:// Execute rank 4
+		{
+			if( u_caster == NULL|| !u_caster->IsInWorld() || !unitTarget || !unitTarget->IsInWorld() || !m_spellInfo)
+				return;
+
+			int32 value = m_spellInfo->EffectBasePoints[i]+1;
+			int32 rageUsed = p_caster->GetUInt32Value(UNIT_FIELD_POWER2);
+
+			int32 rageLeft = 0; // We use all available rage by default
+			Aura* suddenDeath = NULL;
+			suddenDeath = u_caster->FindActiveAura(52437);
+
+			if(suddenDeath != NULL && unitTarget->GetHealthPct() > 20)
+			{		
+				SpellEntry * sd = NULL;
+				sd = dbcSpell.LookupEntry(suddenDeath->pSpellId);
+				if(sd!=NULL)
+					rageLeft = sd->RankNumber > 1 ? sd->RankNumber * 30 + 10 : sd->RankNumber * 30;
+				unitTarget->RemoveAura(suddenDeath); // Sudden Death is removed after 1 execute
+				// With Sudden Death can only use up to 30 total rage. so 30-15 = 15 goes to execute damage
+				rageLeft = std::max(rageLeft, rageUsed - 150);
+				rageUsed = std::min(rageUsed, 150);
+			}
+
+			if( u_caster->HasAurasWithNameHash(SPELL_HASH_GLYPH_OF_EXECUTION))
+				rageUsed += 100; //Your Execute ability deals damage as if you had 10 additional rage.
+			
+			value += (int32) (rageUsed * m_spellInfo->dmg_multiplier[0]); 
+			u_caster->SetPower(POWER_TYPE_RAGE, rageLeft);
+			SpellEntry *spellInfo = dbcSpell.LookupEntry(20647);
+			u_caster->Strike(unitTarget,MELEE,spellInfo,0,0,value,false,false);
+		}break;
+
+	case 20662:// Execute rank 5
+		{
+			if( u_caster == NULL|| !u_caster->IsInWorld() || !unitTarget || !unitTarget->IsInWorld() || !m_spellInfo)
+				return;
+
+			int32 value = m_spellInfo->EffectBasePoints[i]+1;
+			int32 rageUsed = p_caster->GetUInt32Value(UNIT_FIELD_POWER2);
+
+			int32 rageLeft = 0; // We use all available rage by default
+			Aura* suddenDeath = NULL;
+			suddenDeath = u_caster->FindActiveAura(52437);
+
+			if(suddenDeath != NULL && unitTarget->GetHealthPct() > 20)
+			{		
+				SpellEntry * sd = NULL;
+				sd = dbcSpell.LookupEntry(suddenDeath->pSpellId);
+				if(sd!=NULL)
+					rageLeft = sd->RankNumber > 1 ? sd->RankNumber * 30 + 10 : sd->RankNumber * 30;
+				unitTarget->RemoveAura(suddenDeath); // Sudden Death is removed after 1 execute
+				// With Sudden Death can only use up to 30 total rage. so 30-15 = 15 goes to execute damage
+				rageLeft = std::max(rageLeft, rageUsed - 150);
+				rageUsed = std::min(rageUsed, 150);
+			}
+
+			if( u_caster->HasAurasWithNameHash(SPELL_HASH_GLYPH_OF_EXECUTION))
+				rageUsed += 100; //Your Execute ability deals damage as if you had 10 additional rage.
+			
+			value += (int32) (rageUsed * m_spellInfo->dmg_multiplier[0]); 
+			u_caster->SetPower(POWER_TYPE_RAGE, rageLeft);
+			SpellEntry *spellInfo = dbcSpell.LookupEntry(20647);
+			u_caster->Strike(unitTarget,MELEE,spellInfo,0,0,value,false,false);
+		}break;
+
+	case 25234:// Execute rank 6
+		{
+			if( u_caster == NULL|| !u_caster->IsInWorld() || !unitTarget || !unitTarget->IsInWorld() || !m_spellInfo)
+				return;
+
+			int32 value = m_spellInfo->EffectBasePoints[i]+1;
+			int32 rageUsed = p_caster->GetUInt32Value(UNIT_FIELD_POWER2);
+
+			int32 rageLeft = 0; // We use all available rage by default
+			Aura* suddenDeath = NULL;
+			suddenDeath = u_caster->FindActiveAura(52437);
+
+			if(suddenDeath != NULL && unitTarget->GetHealthPct() > 20)
+			{		
+				SpellEntry * sd = NULL;
+				sd = dbcSpell.LookupEntry(suddenDeath->pSpellId);
+				if(sd!=NULL)
+					rageLeft = sd->RankNumber > 1 ? sd->RankNumber * 30 + 10 : sd->RankNumber * 30;
+				unitTarget->RemoveAura(suddenDeath); // Sudden Death is removed after 1 execute
+				// With Sudden Death can only use up to 30 total rage. so 30-15 = 15 goes to execute damage
+				rageLeft = std::max(rageLeft, rageUsed - 150);
+				rageUsed = std::min(rageUsed, 150);
+			}
+
+			if( u_caster->HasAurasWithNameHash(SPELL_HASH_GLYPH_OF_EXECUTION))
+				rageUsed += 100; //Your Execute ability deals damage as if you had 10 additional rage.
+			
+			value += (int32) (rageUsed * m_spellInfo->dmg_multiplier[0]); 
+			u_caster->SetPower(POWER_TYPE_RAGE, rageLeft);
+			SpellEntry *spellInfo = dbcSpell.LookupEntry(20647);
+			u_caster->Strike(unitTarget,MELEE,spellInfo,0,0,value,false,false);
+		}break;
+
+	case 25236:// Execute rank 7
+		{
+			if( u_caster == NULL|| !u_caster->IsInWorld() || !unitTarget || !unitTarget->IsInWorld() || !m_spellInfo)
+				return;
+
+			int32 value = m_spellInfo->EffectBasePoints[i]+1;
+			int32 rageUsed = p_caster->GetUInt32Value(UNIT_FIELD_POWER2);
+
+			int32 rageLeft = 0; // We use all available rage by default
+			Aura* suddenDeath = NULL;
+			suddenDeath = u_caster->FindActiveAura(52437);
+
+			if(suddenDeath != NULL && unitTarget->GetHealthPct() > 20)
+			{		
+				SpellEntry * sd = NULL;
+				sd = dbcSpell.LookupEntry(suddenDeath->pSpellId);
+				if(sd!=NULL)
+					rageLeft = sd->RankNumber > 1 ? sd->RankNumber * 30 + 10 : sd->RankNumber * 30;
+				unitTarget->RemoveAura(suddenDeath); // Sudden Death is removed after 1 execute
+				// With Sudden Death can only use up to 30 total rage. so 30-15 = 15 goes to execute damage
+				rageLeft = std::max(rageLeft, rageUsed - 150);
+				rageUsed = std::min(rageUsed, 150);
+			}
+
+			if( u_caster->HasAurasWithNameHash(SPELL_HASH_GLYPH_OF_EXECUTION))
+				rageUsed += 100; //Your Execute ability deals damage as if you had 10 additional rage.
+			
+			value += (int32) (rageUsed * m_spellInfo->dmg_multiplier[0]); 
+			u_caster->SetPower(POWER_TYPE_RAGE, rageLeft);
+			SpellEntry *spellInfo = dbcSpell.LookupEntry(20647);
+			u_caster->Strike(unitTarget,MELEE,spellInfo,0,0,value,false,false);
+		}break;
+
+	case 47470:// Execute rank 8
+		{
+			if( u_caster == NULL|| !u_caster->IsInWorld() || !unitTarget || !unitTarget->IsInWorld() || !m_spellInfo)
+				return;
+
+			int32 value = m_spellInfo->EffectBasePoints[i]+1;
+			int32 rageUsed = p_caster->GetUInt32Value(UNIT_FIELD_POWER2);
+
+			int32 rageLeft = 0; // We use all available rage by default
+			Aura* suddenDeath = NULL;
+			suddenDeath = u_caster->FindActiveAura(52437);
+
+			if(suddenDeath != NULL && unitTarget->GetHealthPct() > 20)
+			{		
+				SpellEntry * sd = NULL;
+				sd = dbcSpell.LookupEntry(suddenDeath->pSpellId);
+				if(sd!=NULL)
+					rageLeft = sd->RankNumber > 1 ? sd->RankNumber * 30 + 10 : sd->RankNumber * 30;
+				unitTarget->RemoveAura(suddenDeath); // Sudden Death is removed after 1 execute
+				// With Sudden Death can only use up to 30 total rage. so 30-15 = 15 goes to execute damage
+				rageLeft = std::max(rageLeft, rageUsed - 150);
+				rageUsed = std::min(rageUsed, 150);
+			}
+
+			if( u_caster->HasAurasWithNameHash(SPELL_HASH_GLYPH_OF_EXECUTION))
+				rageUsed += 100; //Your Execute ability deals damage as if you had 10 additional rage.
+			
+			value += (int32) (rageUsed * m_spellInfo->dmg_multiplier[0]); 
+			u_caster->SetPower(POWER_TYPE_RAGE, rageLeft);
+			SpellEntry *spellInfo = dbcSpell.LookupEntry(20647);
+			u_caster->Strike(unitTarget,MELEE,spellInfo,0,0,value,false,false);
+		}break;
+
+	case 47471:// Execute rank 9
+		{
+			if( u_caster == NULL|| !u_caster->IsInWorld() || !unitTarget || !unitTarget->IsInWorld() || !m_spellInfo)
+				return;
+
+			int32 value = m_spellInfo->EffectBasePoints[i]+1;
+			int32 rageUsed = p_caster->GetUInt32Value(UNIT_FIELD_POWER2);
+
+			int32 rageLeft = 0; // We use all available rage by default
+			Aura* suddenDeath = NULL;
+			suddenDeath = u_caster->FindActiveAura(52437);
+
+			if(suddenDeath != NULL && unitTarget->GetHealthPct() > 20)
+			{		
+				SpellEntry * sd = NULL;
+				sd = dbcSpell.LookupEntry(suddenDeath->pSpellId);
+				if(sd!=NULL)
+					rageLeft = sd->RankNumber > 1 ? sd->RankNumber * 30 + 10 : sd->RankNumber * 30;
+				unitTarget->RemoveAura(suddenDeath); // Sudden Death is removed after 1 execute
+				// With Sudden Death can only use up to 30 total rage. so 30-15 = 15 goes to execute damage
+				rageLeft = std::max(rageLeft, rageUsed - 150);
+				rageUsed = std::min(rageUsed, 150);
+			}
+
+			if( u_caster->HasAurasWithNameHash(SPELL_HASH_GLYPH_OF_EXECUTION))
+				rageUsed += 100; //Your Execute ability deals damage as if you had 10 additional rage.
+			
+			value += (int32) (rageUsed * m_spellInfo->dmg_multiplier[0]); 
+			u_caster->SetPower(POWER_TYPE_RAGE, rageLeft);
+			SpellEntry *spellInfo = dbcSpell.LookupEntry(20647);
+			u_caster->Strike(unitTarget,MELEE,spellInfo,0,0,value,false,false);
+		}break;
 	case 27893: // Dancing Rune Weapon
 		{
 			/*
@@ -4353,20 +4651,15 @@ void Spell::SpellEffectSummon(uint32 i)
 			u_caster->SetUInt64Value(UNIT_FIELD_SUMMON, pCreature->GetGUID());
 
 			uint32 MiscValue = m_spellInfo->EffectMiscValue[i];
-			if ( MiscValue == 19668 ) //shadowfiend
+			if ( m_spellInfo->EffectMiscValue[i] == 19668 ) //shadowfiend
 			{
 				float parent_bonus = (float)(p_caster->GetDamageDoneMod(SCHOOL_SHADOW)*0.065f);
 				pCreature->SetFloatValue(UNIT_FIELD_MINDAMAGE, pCreature->GetFloatValue(UNIT_FIELD_MINDAMAGE) + parent_bonus);
 				pCreature->SetFloatValue(UNIT_FIELD_MAXDAMAGE, pCreature->GetFloatValue(UNIT_FIELD_MAXDAMAGE) + parent_bonus);
 				pCreature->BaseDamage[0] += parent_bonus;
 				pCreature->BaseDamage[1] += parent_bonus;
-				Unit* uTarget = unitTarget;
-				if( uTarget )
-				{
-					pCreature->GetAIInterface()->AttackReaction( uTarget, 1 );
-					pCreature->GetAIInterface()->SetNextTarget( uTarget );
-				}
-			}
+			}		
+
 			if ( MiscValue == 24207 ) //Army of the dead ghoul.
 			{
 				float parent_bonus = (float)(p_caster->GetDamageDoneMod(SCHOOL_NORMAL)*0.04f);
@@ -4389,16 +4682,7 @@ void Spell::SpellEffectSummon(uint32 i)
 				sEventMgr.AddEvent(pCreature, &Creature::SafeDelete, EVENT_CREATURE_REMOVE_CORPSE, 180000, 1, 0);
 				break;
 			}
-			pCreature->PushToWorld(u_caster->GetMapMgr());
-			if ( MiscValue == 19668 ) //shadowfiend
-			{
-				if( unitTarget )
-				{
-					Log.Notice("YOOO", "attaque");
-					pCreature->GetAIInterface()->AttackReaction( unitTarget, 1 );
-					pCreature->GetAIInterface()->SetNextTarget( unitTarget );
-				}
-			}
+
 			sEventMgr.AddEvent(pCreature, &Creature::SafeDelete, EVENT_CREATURE_REMOVE_CORPSE, GetDuration(), 1, 0);
 		}break;
 	}

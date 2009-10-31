@@ -5106,17 +5106,13 @@ exit:
 			value += (uint32)(p_caster->GetAP()*(0.09f*p_caster->m_comboPoints));
 			m_requiresCP=true;
 		}
+	}
 
-		SpellOverrideMap::iterator itr = p_caster->mSpellOverrideMap.find(GetProto()->Id);
-		if(itr != p_caster->mSpellOverrideMap.end())
-		{
-			ScriptOverrideList::iterator itrSO;
-			for(itrSO = itr->second->begin(); itrSO != itr->second->end(); ++itrSO)
-			{
-				value += RandomUInt((*itrSO)->damage);
-			}
-		}
-	 }
+	//SpellAuraOverrideClassScripts
+	if(u_caster != NULL)
+	{
+		value = u_caster->GetSpellOverrideDamage(GetProto(), value);
+	}
 
 	// TODO: INHERIT ITEM MODS FROM REAL ITEM OWNER - BURLEX BUT DO IT PROPERLY
 

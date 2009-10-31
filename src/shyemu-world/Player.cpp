@@ -366,7 +366,13 @@ mOutOfRangeIdCount(0)
 	m_globalCooldown = 0;
 	m_unstuckCooldown = 0;
 	m_lastHonorResetTime	= 0;
-	memset(&mActions, 0, PLAYER_ACTION_BUTTON_SIZE);
+
+	for(uint8 i = 0; i < MAX_SPEC_COUNT; ++i) 
+	{ 
+		m_specs[i].talents.clear(); 
+		memset(m_specs[i].glyphs, 0, GLYPHS_COUNT); 
+		memset(m_specs[i].actionbars, 0, PLAYER_ACTION_BUTTON_SIZE); 
+	} 
 	tutorialsDirty = true;
 	m_TeleportState = 1;
 	m_beingPushed = false;
@@ -495,7 +501,7 @@ mOutOfRangeIdCount(0)
 
     m_onStrikeSpells.clear();
     m_onStrikeSpellDmg.clear();
-    mSpellOverrideMap.clear();
+   // mSpellOverrideMap.clear();
     mSpells.clear();
     mDeletedSpells.clear();
 	mShapeShiftSpells.clear();
@@ -2790,12 +2796,7 @@ void Player::SaveToDB(bool bNewCharacter /* =false */)
 	_SaveGlyphsToDB(buf);
 
 	// Action bars
-	// First we are going to save both of them
-	// Then only for that spec, which is active
-	if(bNewCharacter)
-		_SaveActionBarsToDBFirst(buf);
-	else
-		_SaveActionBarsToDB(buf);
+	_SaveActionBarsToDB(buf);
 
 	// save quest progress
 	_SaveQuestLogEntry(buf);
@@ -2856,7 +2857,7 @@ void Player::_LoadActionBars(QueryResult * result)
 	}
 }
 
-void Player::_SaveActionBarsToDBFirst(QueryBuffer * buf)
+void Player::_SaveActionBarsToDB(QueryBuffer * buf)
 {
 	for(uint8 s = 0; s < m_talentSpecsCount; ++s)
 	{
@@ -2868,9 +2869,9 @@ void Player::_SaveActionBarsToDBFirst(QueryBuffer * buf)
 				<< "('" << GetLowGUID() << "','"
 				<< uint32(s) << "','"
 				<< uint32(i) << "','"
-				<< uint32(mActions[i].Action) << "','"
-				<< uint32(mActions[i].Type) << "','"
-				<< uint32(mActions[i].Misc) << "')";
+				<< uint32(m_specs[s].actionbars[i].Action) << "','"
+				<< uint32(m_specs[s].actionbars[i].Type) << "','"
+				<< uint32(m_specs[s].actionbars[i].Misc) << "')";
 
 		if(buf == NULL)
 			CharacterDatabase.Execute(ss.str().c_str());
@@ -2878,28 +2879,6 @@ void Player::_SaveActionBarsToDBFirst(QueryBuffer * buf)
 			buf->AddQueryStr(ss.str());
 
 		}
-	}
-}
-
-void Player::_SaveActionBarsToDB(QueryBuffer * buf)
-{
-	uint8 s = m_talentActiveSpec;
-
-	for(uint32 i = 0; i < PLAYER_ACTION_BUTTON_COUNT; ++i)
-	{
-		std::stringstream ss;
-		ss << "REPLACE INTO playeractionbars (guid, spec, button, action, type, misc) VALUES "
-			<< "('" << GetLowGUID() << "','"
-			<< uint32(s) << "','"
-			<< uint32(i) << "','"
-			<< uint32(mActions[i].Action) << "','"
-			<< uint32(mActions[i].Type) << "','"
-			<< uint32(mActions[i].Misc) << "')";
-
-		if(buf == NULL)
-			CharacterDatabase.Execute(ss.str().c_str());
-		else
-			buf->AddQueryStr(ss.str());
 	}
 }
 
@@ -3767,7 +3746,14 @@ void Player::LoadFromDBProc(QueryResultVector & results)
 	RolloverHonor();
 	iInstanceType = get_next_field.GetUInt32();
 
-	// Load drunk value and calculate sobering. after 15 minutes logged out, the player will be sober again
+	m_talentActiveSpec = get_next_field.GetUInt32();
+	m_talentSpecsCount = get_next_field.GetUInt32();
+	if(m_talentSpecsCount > MAX_SPEC_COUNT)
+		m_talentSpecsCount = MAX_SPEC_COUNT;
+	if(m_talentActiveSpec >= m_talentSpecsCount )
+		m_talentActiveSpec = 0;
+
+  // Load drunk value and calculate sobering. after 15 minutes logged out, the player will be sober again
 	uint32 timediff = (uint32)UNIXTIME - m_timeLogoff;
 	uint32 soberFactor;
 	if( timediff > 900 )
@@ -3775,13 +3761,6 @@ void Player::LoadFromDBProc(QueryResultVector & results)
 	else
 		soberFactor = 1 - timediff / 900;
 	SetDrunkValue( uint16( soberFactor * get_next_field.GetUInt32() ) );
-
-	m_talentActiveSpec = get_next_field.GetUInt32();
-	m_talentSpecsCount = get_next_field.GetUInt32();
-	if(m_talentSpecsCount > MAX_SPEC_COUNT)
-		m_talentSpecsCount = MAX_SPEC_COUNT;
-	if(m_talentActiveSpec >= m_talentSpecsCount )
-		m_talentActiveSpec = 0;
 
 	m_phase = get_next_field.GetUInt32(); //Load the player's last phase
 
@@ -5423,14 +5402,13 @@ void Player::CleanupChannels()
 	}
 }
 
-void Player::SendInitialActions(uint8 spec)
+void Player::SendInitialActions()
 {
 	WorldPacket data(SMSG_ACTION_BUTTONS, PLAYER_ACTION_BUTTON_SIZE + 1);
-	data << uint8(spec);       // MesoX: active spec
+	data << uint8(m_talentActiveSpec);       // MesoX: active spec
 	for(uint32 i = 0; i < PLAYER_ACTION_BUTTON_COUNT; ++i)
 	{
-		data << mActions[i].Action << mActions[i].Type << mActions[i].Misc; //VLack: on 3.1.3, despite the format of CMSG_SET_ACTION_BUTTON, here Type have to be sent before Misc
-		printf("SMSG_ACTION_BUTTONS sended with %u %u %u %u\n", i, mActions[i].Action, mActions[i].Type, mActions[i].Misc);
+		data << m_specs[m_talentActiveSpec].actionbars[i].Action << m_specs[m_talentActiveSpec].actionbars[i].Type << m_specs[m_talentActiveSpec].actionbars[i].Misc;
 	}
 	m_session->SendPacket(&data);
 }
@@ -5439,9 +5417,9 @@ void Player::setAction(uint8 button, uint16 action, uint8 type, uint8 misc)
 {
 	if( button >= PLAYER_ACTION_BUTTON_COUNT )
 		return; //packet hack to crash server
-	mActions[button].Action = action;
-	mActions[button].Type = type;
-	mActions[button].Misc = misc;
+	m_specs[m_talentActiveSpec].actionbars[button].Action = action;
+	m_specs[m_talentActiveSpec].actionbars[button].Type = type;
+	m_specs[m_talentActiveSpec].actionbars[button].Misc = misc;
 }
 
 // Groupcheck
@@ -6759,6 +6737,7 @@ void Player::SendLoot(uint64 guid,uint8 loot_type)
 					else
 						data2 << uint32(0);
 
+					data2 << uint32(iter->iItemsCount);
 					data2 << uint32(60000); // countdown
 				}
 
@@ -7236,6 +7215,7 @@ void Player::SendInitialLogonPackets()
 		data << uint32( m_Tutorials[i] );
 	GetSession()->SendPacket(&data);
 
+
 	//3.1: Send the talents
 	smsg_TalentsInfo(false, 0, 0);
 
@@ -7243,7 +7223,7 @@ void Player::SendInitialLogonPackets()
 	smsg_InitialSpells();
 
 	//Initial Actions
-	SendInitialActions(m_talentActiveSpec);
+	SendInitialActions();
 
 	//Factions
 	smsg_InitialFactions();
@@ -13366,17 +13346,6 @@ void Player::ApplySpec(uint8 spec, bool init)
 		SetGlyph(i, m_specs[m_talentActiveSpec].glyphs[i]);
 	}
 	smsg_TalentsInfo(false, 0, 0);
-
-	// Apply Action bars
-	for(uint32 i = 0; i < PLAYER_ACTION_BUTTON_COUNT; ++i)
-	{
-		uint16 a = m_specs[m_talentActiveSpec].actionbars[i].Action;
-		uint8 t = m_specs[m_talentActiveSpec].actionbars[i].Type;
-		uint8 m = m_specs[m_talentActiveSpec].actionbars[i].Misc;
-
-		setAction(i, a, t, m);
-	}
-	SendInitialActions(m_talentActiveSpec);
 }
 
 // Update glyphs after level change

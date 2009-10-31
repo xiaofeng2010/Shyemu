@@ -29,6 +29,7 @@
 #define SPELL_HASH_SUICIDE                                                                0x8F2CE952
 #define SPELL_HASH_BLIZZARD                                                               0xA1761A27
 #define SPELL_HASH_FROSTBOLT_OF_AGES                                                      0x1DC264BA
+#define SPELL_HASH_GLYPH_OF_EXECUTION                                                     0x7E47153F
 #define SPELL_HASH_HOT_FOOT__TEST_                                                        0xBF12F397
 #define SPELL_HASH_SWIM_SPEED__TEST_                                                      0xF0DF9AED
 #define SPELL_HASH_MANA_DRAIN                                                             0xF4354221

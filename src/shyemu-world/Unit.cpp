@@ -5224,6 +5224,30 @@ Aura* Unit::FindAura(uint32 spellId, uint64 guid)
 	return NULL;
 }
 
+Aura* Unit::FindActiveAura(uint32 spellId, uint64 guid)
+{
+	for(uint32 x=0;x<MAX_AURAS;x++)
+	{
+		if(m_auras[x] != NULL && m_auras[x]->GetSpellId()==spellId && (!guid || m_auras[x]->GetCasterGUID() == guid))
+		{
+			return m_auras[x];
+		}
+	}
+	return NULL;
+}
+
+Aura* Unit::FindActiveAuraWithNameHash(uint32 namehash, uint64 guid)
+{
+	for(uint32 x=0;x<MAX_AURAS;x++)
+	{
+		if(m_auras[x] != NULL && m_auras[x]->GetSpellProto()->NameHash == namehash && (!guid || m_auras[x]->GetCasterGUID() == guid))
+		{
+			return m_auras[x];
+		}
+	}
+	return NULL;
+}
+
 void Unit::_UpdateSpells( uint32 time )
 {
 	/* to avoid deleting the current spell */
@@ -8487,4 +8511,51 @@ void Unit::StopChannel()
 {
 	SetUInt32Value(UNIT_FIELD_CHANNEL_OBJECT, 0);
 	SetUInt32Value(UNIT_CHANNEL_SPELL, 0);
+}
+
+void Unit::AddSpellOverride(classScriptOverride & cso)
+{
+	m_SpellOverrideList.push_back(cso);
+}
+
+void Unit::RemoveSpellOverride(uint32 csoId)
+{
+	if(m_SpellOverrideList.size())
+	{
+		SpellOverrideList::iterator itr = m_SpellOverrideList.begin();
+		SpellOverrideList::iterator itr2;
+		for(;itr != m_SpellOverrideList.end();)
+		{
+			itr2 = itr++;
+
+			if(itr2->id == csoId)
+			{
+				m_SpellOverrideList.erase(itr2);
+			}
+		}
+	}
+}
+
+int32 Unit::GetSpellOverrideDamage(SpellEntry const *spellInfo, int32 value) const
+{
+	int32 dmg = 0;
+
+	if(m_SpellOverrideList.size())
+	{
+		for(SpellOverrideList::const_iterator itr = m_SpellOverrideList.begin();itr != m_SpellOverrideList.end();++itr)
+		{
+			for( uint8 i = 0; i < 3; ++i)
+			{
+				if(itr->SpellGroups & (uint64)spellInfo->SpellGroupType[i])
+				{
+					if(itr->percent)
+						dmg += (value / 100) * itr->damage;
+					else
+						dmg += itr->damage;
+				}
+			}
+		}
+	}
+
+	return (value + dmg);
 }

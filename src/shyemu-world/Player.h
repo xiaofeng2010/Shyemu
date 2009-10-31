@@ -727,14 +727,7 @@ struct PetActionBar
 {
 	uint32 spell[10];
 };
-struct classScriptOverride
-{
-	uint32 id;
-	uint32 effect;
-	uint32 aura;
-	uint32 damage;
-	bool percent;
-};
+
 #ifdef ENABLE_ACHIEVEMENTS
 class AchievementMgr;
 #endif
@@ -877,11 +870,8 @@ struct PlayerCooldown
 //  TODO:  Attach characters to user accounts
 //====================================================================
 typedef std::set<uint32>	                        SpellSet;
-typedef std::list<classScriptOverride*>             ScriptOverrideList;
 typedef std::set<uint32>                            SaveSet;
 typedef std::map<uint64, ByteBuffer*>               SplineMap;
-typedef std::map<uint32, ScriptOverrideList* >      SpellOverrideMap;
-typedef std::map<uint32, uint32>                    SpellOverrideExtraAuraMap;
 typedef std::map<uint32, FactionReputation*>        ReputationMap;
 typedef std::map<uint32, uint64>                    SoloSpells;
 typedef std::map<SpellEntry*, pair<uint32, uint32> >StrikeSpellMap;
@@ -1175,7 +1165,6 @@ public:
     //Spells variables
     StrikeSpellMap      m_onStrikeSpells;
     StrikeSpellDmgMap   m_onStrikeSpellDmg;
-    SpellOverrideMap    mSpellOverrideMap;
     SpellSet            mSpells;
     SpellSet            mDeletedSpells;
 	SpellSet			mShapeShiftSpells;
@@ -1188,7 +1177,7 @@ public:
     /* Actionbar                                                            */
     /************************************************************************/
 	void                setAction(uint8 button, uint16 action, uint8 type, uint8 misc);
-	void                SendInitialActions(uint8 spec);
+	void                SendInitialActions();
     bool                m_actionsDirty;
 
     /************************************************************************/
@@ -2190,7 +2179,6 @@ protected:
 
 	void _LoadActionBars(QueryResult * result);
 	void _SaveActionBarsToDB(QueryBuffer * buf);
-	void _SaveActionBarsToDBFirst(QueryBuffer * buf);
 
 	void _LoadPet(QueryResult * result);
 	void _LoadPetNo();
