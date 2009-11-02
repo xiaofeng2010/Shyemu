@@ -934,16 +934,20 @@ void WorldSession::FullLogin(Player * plr)
 
 	// Send revision (if enabled)
 #ifdef WIN32
-	_player->BroadcastMessage("Powered by: %sShyEMU %s - %s-Windows-%s" "((Please have fun))", MSG_COLOR_WHITE, BUILD_TAG,
+	_player->BroadcastMessage("Powered by: %sShyEMU %s - %s-Windows-%s", MSG_COLOR_WHITE, BUILD_TAG,
 		CONFIG, ARCH, MSG_COLOR_LIGHTBLUE);		
 	_player->BroadcastMessage("Revision: %s%u", MSG_COLOR_RED, BUILD_REVISION); 
 #else
-	_player->BroadcastMessage("Powered by: %sShyEMU %s - %s-Windows-%s" "((Please have fun))", MSG_COLOR_WHITE, BUILD_TAG,
+	_player->BroadcastMessage("Powered by: %sShyEMU %s - %s-Windows-%s", MSG_COLOR_WHITE, BUILD_TAG,
 		PLATFORM_TEXT, ARCH, MSG_COLOR_LIGHTBLUE);
 	_player->BroadcastMessage("Revision: %s%u", MSG_COLOR_RED, BUILD_REVISION); 
 #endif
 	// Recruitment message :)
-	//_player->BroadcastMessage("ShyEMU is recruiting developers: Join us on irc.emulationnetwork.com:6667 #shyemu");
+	//_player->BroadcastMessage("ShyEMU is recruiting developers: Join us on irc.dal.net:6667 #shyemu");
+	
+	//Supporter message
+	_player->BroadcastMessage("Report All Bugs at www.shyemu.com/index.php .");
+	
 	if(sWorld.SendStatsOnJoin || HasGMPermissions() )
 	{
 		_player->BroadcastMessage("Online Players: %s%u |rPeak: %s%u|r Accepted Connections: %s%u",

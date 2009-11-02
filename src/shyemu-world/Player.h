@@ -1630,6 +1630,7 @@ public:
 	bool m_bgIsQueued;
 	uint32 m_bgQueueType;
 	uint32 m_bgQueueInstanceId;
+	uint32 m_bgFlagIneligible;
 	void EventRepeatSpell();
 	void EventCastRepeatedSpell(uint32 spellid, Unit *target);
 	int32 CanShootRangedWeapon(uint32 spellid, Unit *target, bool autoshot);

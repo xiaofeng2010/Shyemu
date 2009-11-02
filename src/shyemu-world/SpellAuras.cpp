@@ -2779,13 +2779,12 @@ void Aura::SpellAuraDummy(bool apply)
 				static_cast< Player* >( m_target )->m_IncreaseDmgSnaredSlowed += ((apply) ? 1:-1)*(uint32)(((float)mod->m_amount)/100);
 			}
 		}break;
-	// Mage - Invisibility override
-	case 32612:
+	case 32612: // mage - invisibility override
 		{
-			if( p_target != NULL )
+			if( m_target->IsPlayer() && m_target->IsInWorld() )
 			{
-				p_target->m_mageInvisibility = apply;
-				p_target->UpdateVisibility();
+				TO_PLAYER(m_target)->m_mageInvisibility = apply;
+				TO_PLAYER(m_target)->UpdateVisibility();
 			}
 		}break;
 	// Mage - Brain Freeze 
@@ -4076,35 +4075,34 @@ void Aura::SpellAuraModDetect(bool apply)
 
 void Aura::SpellAuraModInvisibility(bool apply)
 {
+
+	if(m_target->IsPlayer())
+	{
+		if(apply)
+			TO_PLAYER(m_target)->m_bgFlagIneligible++;
+		else
+			TO_PLAYER(m_target)->m_bgFlagIneligible--;
+
+		if(TO_PLAYER(m_target)->m_bg != NULL && TO_PLAYER(m_target)->m_bgHasFlag)
+			TO_PLAYER(m_target)->m_bg->HookOnMount(TO_PLAYER(m_target));
+	}
+
 	SetPositive();
 	if(m_spellProto->Effect[mod->i] == 128)
 		return;
 
-	if(apply)
-	{
+	if(apply) {
 		m_target->SetInvisibility(GetSpellId());
-		m_target->m_invisFlag = static_cast<uint8>( mod->m_miscValue );
-		if( m_target->GetTypeId() == TYPEID_PLAYER )
-		{
-			if( GetSpellId() == 32612 )
-				static_cast<Player*>(m_target)->SetFlag( PLAYER_FIELD_BYTES2, 0x4000 ); //Mage Invis self visual
-		}
-
-		m_target->RemoveAurasByInterruptFlag(AURA_INTERRUPT_ON_INVINCIBLE);
-	}
-	else
-	{
+		m_target->m_invisFlag = mod->m_miscValue;
+	} else {
+		m_target->SetInvisibility(0);
 		m_target->m_invisFlag = INVIS_FLAG_NORMAL;
-		if( m_target->GetTypeId() == TYPEID_PLAYER )
-		{
-			if( GetSpellId() == 32612 )
-				static_cast<Player*>(m_target)->RemoveFlag( PLAYER_FIELD_BYTES2, 0x4000 );
-		}
 	}
 
 	m_target->m_invisible = apply;
 	m_target->UpdateVisibility();
 }
+
 
 void Aura::SpellAuraModInvisibilityDetection(bool apply)
 {
@@ -4116,11 +4114,11 @@ void Aura::SpellAuraModInvisibilityDetection(bool apply)
 		m_target->m_invisDetect[mod->m_miscValue] += mod->m_amount;
 		SetPositive ();
 	}
-	else
+	else 
 		m_target->m_invisDetect[mod->m_miscValue] -= mod->m_amount;
 
 	if(m_target->IsPlayer())
-		static_cast< Player* >( m_target )->UpdateVisibility();
+		TO_PLAYER( m_target )->UpdateVisibility();
 }
 
 void Aura::SpellAuraModTotalHealthRegenPct(bool apply)

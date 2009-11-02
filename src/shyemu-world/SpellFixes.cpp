@@ -5929,28 +5929,23 @@ void ApplyNormalFixes()
 			sp->c_is_flags |= SPELL_FLAG_IS_FORCEDDEBUFF;
 		}
 
-		//Mage - Invisibility
-		sp = dbcSpell.LookupEntryForced( 66 );
-		if( sp != NULL )
-		{
-			sp->AuraInterruptFlags |= AURA_INTERRUPT_ON_CAST_SPELL;
-			sp->Effect[1] = 0;
-			sp->EffectApplyAuraName[2] = SPELL_AURA_PERIODIC_TRIGGER_SPELL;
-			sp->Effect[2] = SPELL_EFFECT_APPLY_AURA;
-            sp->EffectAmplitude[2] = 3000;
-			sp->EffectImplicitTargetA[2] = EFF_TARGET_SELF;
-			sp->EffectBaseDice[2] = 1;
-			sp->EffectDieSides[2] = 1;
-			sp->EffectTriggerSpell[2] = 32612;
-			sp->EffectBasePoints[2] = -1;
-		}
+			// Invisibility
+		    sp = dbcSpell.LookupEntryForced( 66 );
+			if( sp != NULL )
+				{
+					sp->EffectTriggerSpell[1] = 32612;
+					sp->EffectAmplitude[1]	=	3000;
+				}
 
-		 //Invisibility triggered spell, should be removed on cast
-		sp = dbcSpell.LookupEntryForced( 32612 );
-		if( sp != NULL )
-		{
-			sp->AuraInterruptFlags |= AURA_INTERRUPT_ON_CAST_SPELL;
-		}
+			// Invisibility (second bit)
+			sp = dbcSpell.LookupEntryForced( 32612 );
+			if( sp != NULL )
+				{
+						sp->Effect[1] = SPELL_EFFECT_APPLY_AURA;
+						sp->EffectApplyAuraName[1] = SPELL_AURA_DUMMY;
+						sp->Effect[2] = 0;
+						sp->AuraInterruptFlags = AURA_INTERRUPT_ON_CAST_SPELL | AURA_INTERRUPT_ON_START_ATTACK | AURA_INTERRUPT_ON_HOSTILE_SPELL_INFLICTED;
+				}
 
 		//Fingers of frost proc
 		sp = dbcSpell.LookupEntryForced( 44544 );

@@ -6177,15 +6177,29 @@ bool Player::CanSee(Object* obj) // * Invisibility & Stealth Detection - Partha 
 		return false;
 	}
 	//------------------------------------------------------------------
+	// Mage - Invisibility (Fix)
+	if( IsPlayer() && m_mageInvisibility )
+	{
+		if( object_type == TYPEID_PLAYER )
+			return TO_PLAYER(obj)->m_mageInvisibility;
+
+		if( object_type == TYPEID_UNIT )
+			return false;
+
+		return true;
+	}
 
 	if (!(m_phase & obj->m_phase)) //What you can't see, you can't see, no need to check things further.
 		return false;
 
 	switch(object_type) // we are alive or we haven't released our spirit yet
-	{
+	{			
 		case TYPEID_PLAYER:
 			{
-				Player *pObj = static_cast< Player* >(obj);
+				Player* pObj = TO_PLAYER(obj);
+
+				if( pObj->m_mageInvisibility )
+					return false;
 
 				if(pObj->m_invisible) // Invisibility - Detection of Players
 				{
