@@ -1,7 +1,7 @@
-ArcEmu Win32/64 Installation Instructions
+ShyEmu Win32/64 Installation Instructions
 =========================================
 
-Read trunk\extras\arcemu-windows-libraries\README.txt
+Read trunk\extras\shyemu-windows-libraries\README.txt
 
 
 COLLISION:
